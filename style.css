@@ -881,12 +881,11 @@ nav {
 
 /* 电脑/宽屏设备 (宽度 > 1024px)：隐藏侧边栏和汉堡按钮 */
 @media (min-width: 1025px) {
-  /* 隐藏 .menu 里的第三个按钮（汉堡按钮） */
-  .menu button:nth-child(3) {
+  .hamburger-btn {
     display: none;
   }
   .mobile-sidebar {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -1075,4 +1074,140 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ====== Vue 相关样式 ====== */
+
+[v-cloak] { display: none; }
+
+/* ====== 搜索下拉框 ====== */
+.search-wrapper {
+  position: relative;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  background-color: rgba(26, 26, 26, 0.98);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 1100;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.search-dropdown input {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #ffffff;
+  font-family: var(--font-chakra-petch), sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.search-dropdown input:focus {
+  border-color: #e11d48;
+  box-shadow: 0 0 8px rgba(225, 29, 72, 0.2);
+}
+
+.search-dropdown input::placeholder {
+  color: #888;
+}
+
+.search-results {
+  margin-top: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.search-results a {
+  display: block;
+  padding: 10px 12px;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--font-chakra-petch), sans-serif;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.search-results a:hover {
+  background-color: rgba(225, 29, 72, 0.15);
+  color: #e11d48;
+}
+
+.search-no-results {
+  margin-top: 8px;
+  padding: 10px 12px;
+  color: #888;
+  font-family: var(--font-chakra-petch), sans-serif;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ====== 中文字体切换 ====== */
+html.chinese-font body,
+html.chinese-font {
+  font-family: "Noto Sans SC", "Chakra Petch", sans-serif !important;
+}
+
+html.chinese-font h1,
+html.chinese-font h2,
+html.chinese-font h3,
+html.chinese-font .nav-text-link,
+html.chinese-font .map-name h3,
+html.chinese-font .player-info h3,
+html.chinese-font .player-info p,
+html.chinese-font .tab-btn,
+html.chinese-font .type-tab {
+  font-family: "Noto Sans SC", "Chakra Petch", sans-serif;
+}
+
+/* ====== 汉堡按钮响应式 ====== */
+.hamburger-btn {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .desktop-nav-links {
+    display: none;
+  }
+
+  .mobile-sidebar {
+    display: flex;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-sidebar {
+    display: none;
+  }
+}
+
+/* ====== 隐藏章节（How to use / Contact us） ====== */
+.hidden-section {
+  display: none;
+}
+
+.hidden-section.revealed {
+  display: block;
+  animation: slideDownFade 0.5s ease forwards;
+}
+
+/* ====== Nade Instructions 表格默认隐藏 ====== */
+.table-container.hidden {
+  display: none;
 }

@@ -6,7 +6,7 @@
     <title>CSPROPS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Russo+One&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
@@ -16,54 +16,60 @@
         <button class="close-btn" id="closeAuth">&times;</button>
         
         <div id="loginForm">
-            <h3>LOGIN</h3>
-            <input type="text" id="loginUser" placeholder="Username">
+            <h3 data-i18n="login">LOGIN</h3>
+            <input type="text" id="loginUser" data-i18n-placeholder="username" placeholder="Username">
             <input type="password" id="loginPass" placeholder="Password">
-            <button class="submit-btn" id="doLogin">SIGN IN</button>
-            <p class="switch-text">New user? <a href="#" id="toReg">Register here</a></p>
+            <button class="submit-btn" id="doLogin" data-i18n="signIn">SIGN IN</button>
+            <p class="switch-text"><span data-i18n="newUser">New user?</span> <a href="#" id="toReg" data-i18n="registerHere">Register here</a></p>
         </div>
 
         <div id="registerForm" class="hidden">
-            <h3>REGISTER</h3>
-            <input type="text" id="regName" placeholder="Full Name">
-            <input type="text" id="regUser" placeholder="Username">
+            <h3 data-i18n="register">REGISTER</h3>
+            <input type="text" id="regName" data-i18n-placeholder="fullName" placeholder="Full Name">
+            <input type="text" id="regUser" data-i18n-placeholder="username" placeholder="Username">
             <input type="password" id="regPass" placeholder="Password">
-            <div class="avatar-select">
-                <label>Select Avatar:</label>
-                <input type="file" id="regAvatar" accept="image/*">
-            </div>
-            <button class="submit-btn" id="doReg">CREATE ACCOUNT</button>
-            <p class="switch-text">Back to <a href="#" id="toLogin">Login</a></p>
+            <button class="submit-btn" id="doReg" data-i18n="createAccount">CREATE ACCOUNT</button>
+            <p class="switch-text"><span data-i18n="backTo">Back to</span> <a href="#" id="toLogin">Login</a></p>
         </div>
     </div>
 </div>
-    <header class="navbar">
+    <header class="navbar" id="navbarApp" v-cloak>
        <nav>
       <div class="logo-container">
         <img src="assets/Map image/logo.png" alt="CS2 Props Logo" class="logo-image">
       </div>
-      
-    
+
+      <div class="desktop-nav-links">
+        <a v-for="h in headings" :href="'#' + h.id" class="nav-text-link" @click.prevent="scrollTo(h)">{{ h.text }}</a>
+      </div>
 
       <div class="menu" >
         <div class="menu">
     <div id="userArea" class="user-area">
-        <button id="loginTriggerBtn" class="nav-text-link">LOGIN</button>
+        <button id="loginTriggerBtn" class="nav-text-link" data-i18n="login">LOGIN</button>
         <div id="userProfile" class="user-profile hidden">
-            <img id="userAvatar" src="assets/default-avatar.png" alt="Avatar" class="avatar-circle">
             <span id="userNameDisplay" class="nav-text-link">Username</span>
-            <button id="logoutBtn" class="logout-mini-btn">LOGOUT</button>
+            <button id="logoutBtn" class="logout-mini-btn" data-i18n="logout">LOGOUT</button>
         </div>
     </div>
 </div>
 
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <button>
+        <div class="search-wrapper">
+          <button @click="toggleSearch" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+          <div v-if="searchOpen" class="search-dropdown" @click.stop>
+            <input type="text" v-model="searchQuery" placeholder="Search sections..." ref="searchInput" @keyup.escape="searchOpen = false; searchQuery = ''" autocomplete="off">
+            <div v-if="searchResults.length" class="search-results">
+              <a v-for="r in searchResults" :key="r.id" href="javascript:void(0)" @click.prevent="goToResult(r)">{{ r.text }}</a>
+            </div>
+            <div v-else-if="searchQuery" class="search-no-results">No sections found</div>
+          </div>
+        </div>
+        <button @click="toggleLang" :title="lang === 'zh' ? 'Switch to English' : '切换到中文'" aria-label="Toggle language" data-i18n-title="fontTooltip">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m5 8 6 6"></path>
             <path d="m4 14 6-6 2-3"></path>
@@ -73,7 +79,7 @@
             <path d="M14 18h6"></path>
           </svg>
         </button>
-        <button>
+        <button @click="toggleSidebar" class="hamburger-btn" aria-label="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="4" x2="20" y1="12" y2="12"></line>
             <line x1="4" x2="20" y1="6" y2="6"></line>
@@ -82,6 +88,9 @@
         </button>
       </div>
       </nav>
+      <aside class="mobile-sidebar" :class="{ open: sidebarOpen }">
+        <a v-for="h in headings" :key="h.id" :href="'#' + h.id" class="nav-text-link" @click.prevent="scrollTo(h)">{{ h.text }}</a>
+      </aside>
     </header>
     <main>
       <hero class="hero-container">
@@ -89,12 +98,12 @@
       </hero>
       <section class="hero">
         <section class="header-content">
-          <h1>CS2 Nades Guide</h1>
-          <p>Learn pro CS2 nade lineups for competitive matches.</p>
+          <h1 data-i18n="heroTitle">CS2 Nades Guide</h1>
+          <p data-i18n="heroDesc">Learn pro CS2 nade lineups for competitive matches.</p>
         </section>
       </section>
       <section class="select-map">
-        <h2>Nade lineups</h2>
+        <h2 data-i18n="nadeLineups">Nade lineups</h2>
         <div class="map-list">
           <a class="map-button" href="javascript:void(0)" id="dust2">
             <div class="aspect-video-relative">
@@ -131,10 +140,10 @@
         </div>
 
         <div id="nade-type-selection" class="nade-type-tabs" style="display: none;">
-          <button class="type-tab active" data-type="Flashbang">Flashbang</button>
-          <button class="type-tab" data-type="Smoke">Smoke</button>
-          <button class="type-tab" data-type="Molotov">Molotov</button>
-          <button class="type-tab" data-type="HEGrenade">HE Grenade</button>
+          <button class="type-tab active" data-type="Flashbang" data-i18n="flashbang">Flashbang</button>
+          <button class="type-tab" data-type="Smoke" data-i18n="smoke">Smoke</button>
+          <button class="type-tab" data-type="Molotov" data-i18n="molotov">Molotov</button>
+          <button class="type-tab" data-type="HEGrenade" data-i18n="hegrenade">HE Grenade</button>
         </div>
 
         <div class="nade-video-carousel" style="display: none;">
@@ -164,61 +173,61 @@
         </div>
 
       </section>
-        <h2>Nade Instructions</h2>
+        <h2 data-i18n="nadeInstructions">Nade Instructions</h2>
       <section class="nade-selector">
             <div class="nade-list">
                 <button class="nade-button" data-type="flashbang">
                     <img src="assets/icons/flashbang.webp" alt="Flashbang">
-                    <span>Flashbang</span>
+                    <span data-i18n="flashbang">Flashbang</span>
                 </button>
                 <button class="nade-button" data-type="hegrenade">
                     <img src="assets/icons/hegrenade.webp" alt="He Grenade">
-                    <span>He Grenade</span>
+                    <span data-i18n="hegrenade">He Grenade</span>
                 </button>
                 <button class="nade-button" data-type="smoke">
                     <img src="assets/icons/smoke.webp" alt="smoke">
-                    <span>smoke</span>
+                    <span data-i18n="smoke">Smoke</span>
                 </button>
                 <button class="nade-button" data-type="molotov">
                     <img src="assets/icons/molotov.webp" alt="Molotov">
-                    <span>Molotov</span>
+                    <span data-i18n="molotov">Molotov</span>
                 </button>
-            <div class="table-container">
+            <div class="table-container hidden">
               <table class="nade-info-table">
                 <thead>
                   <tr>
-                    <th>Nade Type</th>
-                    <th>Usage</th>
-                    <th>Effect</th>
+                    <th data-i18n="nadeType">Nade Type</th>
+                    <th data-i18n="usage">Usage</th>
+                    <th data-i18n="effect">Effect</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Flashbang</td>
-                    <td>Used to blind opponents temporarily.</td>
-                    <td>Causes temporary blindness and disorientation.</td>
+                    <td data-i18n="flashbang">Flashbang</td>
+                    <td data-i18n="flashUsage">Used to blind opponents temporarily.</td>
+                    <td data-i18n="flashEffect">Causes temporary blindness and disorientation.</td>
                   </tr>
                   <tr>
-                    <td>He Grenade</td>
-                    <td>Used to deal damage to opponents.</td>
-                    <td>Explodes on impact, dealing area damage.</td>
+                    <td data-i18n="hegrenade">He Grenade</td>
+                    <td data-i18n="heUsage">Used to deal damage to opponents.</td>
+                    <td data-i18n="heEffect">Explodes on impact, dealing area damage.</td>
                   </tr>
                   <tr>
-                    <td>smoke</td>
-                    <td>Used to create smoke.</td>
-                    <td>Generates a cloud of smoke that blocks vision.</td>
+                    <td data-i18n="smoke">Smoke</td>
+                    <td data-i18n="smokeUsage">Used to create smoke.</td>
+                    <td data-i18n="smokeEffect">Generates a cloud of smoke that blocks vision.</td>
                   </tr>
                   <tr>
-                    <td>Molotov</td>
-                    <td>Used to block paths and deal damage over time.</td>
-                    <td>Creates a fire area that damages opponents over time.</td>
+                    <td data-i18n="molotov">Molotov</td>
+                    <td data-i18n="molotovUsage">Used to block paths and deal damage over time.</td>
+                    <td data-i18n="molotovEffect">Creates a fire area that damages opponents over time.</td>
                   </tr>
                 </tbody>
               </table>
             </div>
         </section>
         
-        <h2>Player Introduction</h2>
+        <h2 data-i18n="playerIntro">Player Introduction</h2>
         <section class="player-carousel-section">
           <div class="player-carousel">
             <button class="carousel-btn" id="prev-player" aria-label="Previous player">
@@ -236,7 +245,7 @@
                 </div>
                 <div class="player-info">
                   <h3>s1mple</h3>
-                  <p>AWPer / Star Player</p>
+                  <p data-i18n="awperStar">AWPer / Star Player</p>
                 </div>
               </article>
         
@@ -246,7 +255,7 @@
                 </div>
                 <div class="player-info">
                   <h3>ZywOo</h3>
-                  <p>AWPer / Clutch King</p>
+                  <p data-i18n="awperClutch">AWPer / Clutch King</p>
                 </div>
               </article>
         
@@ -256,7 +265,7 @@
                 </div>
                 <div class="player-info">
                   <h3>NiKo</h3>
-                  <p>Entry Fragger / Rifler</p>
+                  <p data-i18n="entryFragger">Entry Fragger / Rifler</p>
                 </div>
               </article>
 
@@ -266,7 +275,7 @@
                 </div>
                 <div class="player-info">
                   <h3>m0NESY</h3>
-                  <p>AWPer / Prodigy</p>
+                  <p data-i18n="awperProdigy">AWPer / Prodigy</p>
                 </div>
               </article>
 
@@ -285,9 +294,9 @@
           <h2 id="detail-player-name">Player Name</h2>
           
             <div class="media-tabs">
-              <button class="tab-btn active" data-category="mvp">MVP Moments</button>
-              <button class="tab-btn" data-category="funny">Funny Times</button>
-              <button class="tab-btn" data-category="memes">Memes & Pictures</button>
+              <button class="tab-btn active" data-category="mvp" data-i18n="mvpMoments">MVP Moments</button>
+              <button class="tab-btn" data-category="funny" data-i18n="funnyTimes">Funny Times</button>
+              <button class="tab-btn" data-category="memes" data-i18n="memesPictures">Memes & Pictures</button>
             </div>
 
           <div class="media-display-container">
@@ -295,18 +304,19 @@
               </div>
           </div>
         </section>
-       <h2>How to use CSwPROP?</h2>
+<div class="hidden-section" id="how-to-use-section">
+       <h2 data-i18n="howToUse">How to use CSwPROP?</h2>
         <section class="usage-guide">
           <div class="accordion custom-accordion" id="usageAccordion">
-            
+
             <div class="accordion-item">
               <h3 class="accordion-header" id="headingOne" style="margin-top: 0;">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" data-i18n="step1Title">
                   Step 1: Select a Map
                 </button>
               </h3>
               <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#usageAccordion">
-                <div class="accordion-body">
+                <div class="accordion-body" data-i18n="step1Body">
                   Click on a map to view available nade lineups.
                 </div>
               </div>
@@ -314,12 +324,12 @@
 
             <div class="accordion-item">
               <h3 class="accordion-header" id="headingTwo" style="margin-top: 0;">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" data-i18n="step2Title">
                   Step 2: Filter by Grenade Type
                 </button>
               </h3>
               <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#usageAccordion">
-                <div class="accordion-body">
+                <div class="accordion-body" data-i18n="step2Body">
                   Use the nade type selector to filter lineups by grenade type.
                 </div>
               </div>
@@ -327,36 +337,37 @@
 
             <div class="accordion-item">
               <h3 class="accordion-header" id="headingThree" style="margin-top: 0;">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" data-i18n="step3Title">
                   Step 3: View Instructions
                 </button>
               </h3>
               <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#usageAccordion">
-                <div class="accordion-body">
+                <div class="accordion-body" data-i18n="step3Body">
                   Click on a lineup to view detailed instructions and visuals.
                 </div>
               </div>
             </div>
-            
+
           </div>
 
-
-
-          <h2>Other questions? Contact us</h2>
+        </section>
+</div>
+<div class="hidden-section" id="contact-us-section">
+          <h2 data-i18n="contactUs">Other questions? Contact us</h2>
           <form class="contact-form">
             <div class="form-group">
-              <label for="name">Your Name</label>
+              <label for="name" data-i18n="yourName">Your Name</label>
               <input type="text" id="name" name="name" placeholder="Enter your name" required>
             </div>
 
             <div class="form-group">
-              <label for="email">Your Email</label>
+              <label for="email" data-i18n="yourEmail">Your Email</label>
               <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             <div class="form-group">
-              <label for="type">Feedback Type</label>
-              <select id="type" name="type" required>
+              <label for="type" data-i18n="feedbackType">Feedback Type</label>
+              <select id="type" name="type" required data-i18n-option="selectOption,reportBug,requestFeature,generalFeedback">
                 <option value="" disabled selected>Select an option</option>
                 <option value="bug">Report a Bug</option>
                 <option value="feature">Request a Feature</option>
@@ -365,21 +376,22 @@
             </div>
 
             <div class="form-group">
-              <label for="message">Your Message</label>
-              <textarea id="message" name="message" placeholder="How can we improve CS2 Props?" rows="5" required></textarea>
+              <label for="message" data-i18n="yourMessage">Your Message</label>
+              <textarea id="message" name="message" data-i18n-placeholder="messagePlaceholder" placeholder="How can we improve CS2 Props?" rows="5" required></textarea>
             </div>
 
-            <button type="submit" class="submit-btn">Send Message</button>
+            <button type="submit" class="submit-btn" data-i18n="sendMessage">Send Message</button>
           </form>
-        </section>
+</div>
     </main>
     <footer class="site-footer">
       <div class="container">
-        <p>&copy; 2026 CS2 Props. All rights reserved.</p>
+        <p data-i18n="footer">&copy; 2026 CS2 Props. All rights reserved.</p>
       </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script>
       // 1. 角色卡片左右滑动逻辑
       const playerWrapper = document.getElementById('player-wrapper');
@@ -423,7 +435,7 @@
         mediaContentWrapper.innerHTML = ''; 
         
         if (!playerMediaDatabase[player] || !playerMediaDatabase[player][category]) {
-          mediaContentWrapper.innerHTML = '<p class="media-description" style="border-left-color: gray;">Content coming soon!</p>';
+          mediaContentWrapper.innerHTML = '<p class="media-description" style="border-left-color: gray;">'+__t('sectionComingSoon')+'</p>';
           return;
         }
 
@@ -449,7 +461,7 @@
           if (!playerName) return;
 
           currentPlayer = playerName;
-          detailPlayerName.textContent = `${playerName} Highlights`;
+          detailPlayerName.textContent = __t('playerHighlights', playerName);
           
           playerDetailsSection.style.display = 'block';
           currentCategory = 'mvp';
@@ -515,10 +527,10 @@
           const val = nameInput.value.trim();
           const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]{2,20}$/; 
           if (val === '') {
-              showError(nameInput, 'Please enter your name');
+              showError(nameInput, __t('enterName'));
               return false;
           } else if (!nameRegex.test(val)) {
-              showError(nameInput, 'Invalid name format (2-20 characters, no numbers)');
+              showError(nameInput, __t('invalidName'));
               return false;
           } else {
               showSuccess(nameInput);
@@ -530,10 +542,10 @@
           const val = emailInput.value.trim();
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (val === '') {
-              showError(emailInput, 'Please enter your email address');
+              showError(emailInput, __t('enterEmail'));
               return false;
           } else if (!emailRegex.test(val)) {
-              showError(emailInput, 'Please enter a valid email address');
+              showError(emailInput, __t('invalidEmail'));
               return false;
           } else {
               showSuccess(emailInput);
@@ -555,10 +567,10 @@
       function validateMessage() {
           const val = messageInput.value.trim();
           if (val === '') {
-              showError(messageInput, 'Please enter your message');
+              showError(messageInput, __t('enterMessage'));
               return false;
           } else if (val.length < 10) {
-              showError(messageInput, 'At least 10 characters required');
+              showError(messageInput, __t('messageTooShort'));
               return false;
           } else {
               showSuccess(messageInput);
@@ -590,7 +602,7 @@
                       firstError.focus();
                   }
               } else {
-                  alert("Validation passed! The form will be submitted.");
+                  alert(__t('validationPassed'));
               }
           });
       }
@@ -733,157 +745,362 @@
         });
       }
 
-      //汉堡菜单
-      // ====== 动态侧边栏与桌面导航逻辑 ======
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. 获取所有 h2 标签以及导航栏相关容器
-  const headings = document.querySelectorAll("h2");
-  const navMenuDiv = document.querySelector(".menu");
-  const navBarNav = document.querySelector(".navbar nav");
-  
-  // 2. 找到你指定的汉堡菜单按钮 (在 .menu 中是第三个 button)
-  const menuButtons = document.querySelectorAll(".menu button");
-  const sidebarBtn = menuButtons[2]; 
+      // ====== Vue 导航栏应用 + 国际化 + 章节控制 ======
+const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
-  // 3. 创建侧边栏容器 (移动端) 和 链接容器 (桌面端)
-  const sidebar = document.createElement("aside");
-  sidebar.className = "mobile-sidebar";
-  document.body.appendChild(sidebar);
+const i18nText = {
+  en: {
+    login:'LOGIN',logout:'LOGOUT',username:'Username',
+    nadeLineups:'Nade lineups',nadeInstructions:'Nade Instructions',
+    playerIntro:'Player Introduction',howToUse:'How to use CSwPROP?',
+    contactUs:'Other questions? Contact us',
+    heroTitle:'CS2 Nades Guide',heroDesc:'Learn pro CS2 nade lineups for competitive matches.',
+    flashbang:'Flashbang',hegrenade:'He Grenade',smoke:'Smoke',molotov:'Molotov',
+    nadeType:'Nade Type',usage:'Usage',effect:'Effect',
+    flashUsage:'Used to blind opponents temporarily.',
+    flashEffect:'Causes temporary blindness and disorientation.',
+    heUsage:'Used to deal damage to opponents.',
+    heEffect:'Explodes on impact, dealing area damage.',
+    smokeUsage:'Used to create smoke.',
+    smokeEffect:'Generates a cloud of smoke that blocks vision.',
+    molotovUsage:'Used to block paths and deal damage over time.',
+    molotovEffect:'Creates a fire area that damages opponents over time.',
+    step1Title:'Step 1: Select a Map',step1Body:'Click on a map to view available nade lineups.',
+    step2Title:'Step 2: Filter by Grenade Type',step2Body:'Use the nade type selector to filter lineups by grenade type.',
+    step3Title:'Step 3: View Instructions',step3Body:'Click on a lineup to view detailed instructions and visuals.',
+    yourName:'Your Name',yourEmail:'Your Email',feedbackType:'Feedback Type',
+    selectOption:'Select an option',reportBug:'Report a Bug',requestFeature:'Request a Feature',
+    generalFeedback:'General Feedback',yourMessage:'Your Message',
+    messagePlaceholder:'How can we improve CS2 Props?',sendMessage:'Send Message',
+    signIn:'SIGN IN',createAccount:'CREATE ACCOUNT',newUser:'New user?',
+    registerHere:'Register here',backTo:'Back to',fullName:'Full Name',
+    selectAvatar:'Select Avatar:',register:'REGISTER',
+    awperStar:'AWPer / Star Player',awperClutch:'AWPer / Clutch King',
+    entryFragger:'Entry Fragger / Rifler',awperProdigy:'AWPer / Prodigy',
+    mvpMoments:'MVP Moments',funnyTimes:'Funny Times',memesPictures:'Memes & Pictures',
+    footer:'© 2026 CS2 Props. All rights reserved.',
+    searchPlaceholder:'Search sections...',noSections:'No sections found',
+    sectionComingSoon:'Content coming soon!',
+    enterName:'Please enter your name',
+    invalidName:'Invalid name format (2-20 characters, no numbers)',
+    enterEmail:'Please enter your email address',invalidEmail:'Please enter a valid email address',
+    enterMessage:'Please enter your message',messageTooShort:'At least 10 characters required',
+    validationPassed:'Validation passed! The form will be submitted.',
+    fillAllFields:'Please fill all fields',userExists:'User exists',
+    regSuccess:'Success! Please login.',invalidCreds:'Invalid credentials',
+    fontTooltip:'Switch to Chinese',playerHighlights:'{0} Highlights',
+  },
+  zh: {
+    login:'登录',logout:'退出',username:'用户名',
+    nadeLineups:'道具投掷',nadeInstructions:'道具说明',playerIntro:'选手介绍',
+    howToUse:'如何使用CSwPROP？',contactUs:'其他问题？联系我们',
+    heroTitle:'CS2 道具指南',heroDesc:'学习CS2职业道具投掷技巧，提升竞技水平。',
+    flashbang:'闪光弹',hegrenade:'高爆手雷',smoke:'烟雾弹',molotov:'燃烧弹',
+    nadeType:'道具类型',usage:'用途',effect:'效果',
+    flashUsage:'用于暂时致盲对手。',flashEffect:'造成暂时性失明和方向感混乱。',
+    heUsage:'用于对对手造成伤害。',heEffect:'撞击后爆炸，造成范围伤害。',
+    smokeUsage:'用于制造烟雾。',smokeEffect:'产生阻挡视线的烟雾云。',
+    molotovUsage:'用于封锁路径并造成持续伤害。',molotovEffect:'制造火焰区域，对对手造成持续伤害。',
+    step1Title:'第一步：选择地图',step1Body:'点击地图查看可用的道具投掷点位。',
+    step2Title:'第二步：按道具类型筛选',step2Body:'使用道具类型选择器按手雷类型筛选。',
+    step3Title:'第三步：查看说明',step3Body:'点击投掷点位查看详细说明和演示。',
+    yourName:'你的名字',yourEmail:'你的邮箱',feedbackType:'反馈类型',
+    selectOption:'请选择',reportBug:'报告Bug',requestFeature:'请求功能',
+    generalFeedback:'通用反馈',yourMessage:'你的消息',
+    messagePlaceholder:'我们如何改进CS2 Props？',sendMessage:'发送消息',
+    signIn:'登录',createAccount:'创建账号',newUser:'新用户？',
+    registerHere:'在此注册',backTo:'返回',fullName:'全名',
+    selectAvatar:'选择头像：',register:'注册',
+    awperStar:'狙击手 / 明星选手',awperClutch:'狙击手 / 残局之王',
+    entryFragger:'突破手 / 步枪手',awperProdigy:'狙击手 / 天才少年',
+    mvpMoments:'MVP时刻',funnyTimes:'趣味时刻',memesPictures:'梗图与图片',
+    footer:'© 2026 CS2 Props. 保留所有权利。',
+    searchPlaceholder:'搜索章节...',noSections:'未找到相关章节',
+    sectionComingSoon:'内容即将推出！',
+    enterName:'请输入你的名字',invalidName:'名字格式无效（2-20个字符，不含数字）',
+    enterEmail:'请输入你的邮箱地址',invalidEmail:'请输入有效的邮箱地址',
+    enterMessage:'请输入你的消息',messageTooShort:'至少需要10个字符',
+    validationPassed:'验证通过！表单即将提交。',fillAllFields:'请填写所有字段',
+    userExists:'用户已存在',regSuccess:'注册成功！请登录。',invalidCreds:'用户名或密码错误',
+    fontTooltip:'切换到英文',playerHighlights:'{0} 精彩集锦',
+  }
+};
 
-  const desktopNav = document.createElement("div");
-  desktopNav.className = "desktop-nav-links";
-  // 将桌面导航插入到 Logo 和 右侧图标按钮组之间
-  navBarNav.insertBefore(desktopNav, navMenuDiv);
+function __t(key, ...args) {
+  const lang = document.documentElement.getAttribute('data-lang') || 'en';
+  let text = (i18nText[lang] && i18nText[lang][key]) || key;
+  args.forEach((a, i) => { text = text.replace('{'+i+'}', a); });
+  return text;
+}
+window.__t = __t;
 
-  // 4. 遍历页面中所有的 h2 标签，生成对应的跳转链接
-  headings.forEach((h2, index) => {
-    // 确保每个 h2 都有 id，如果没有则动态分配一个
-    if (!h2.id) {
-      h2.id = "dynamic-section-" + index;
+function applyTranslations(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (!key) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = __t(key);
+    } else if (el.tagName === 'SELECT') {
+      // select elements: translate the selected option text, not the select itself
+    } else {
+      el.textContent = __t(key);
+    }
+  });
+  // Update select option text
+  document.querySelectorAll('[data-i18n-option]').forEach(el => {
+    const keys = el.getAttribute('data-i18n-option').split(',');
+    const options = el.querySelectorAll('option');
+    keys.forEach((key, i) => {
+      if (options[i]) options[i].textContent = __t(key.trim());
+    });
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = __t(el.getAttribute('data-i18n-title'));
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = __t(el.getAttribute('data-i18n-placeholder'));
+  });
+}
+
+const navbarApp = createApp({
+  setup() {
+    const searchOpen = ref(false);
+    const searchQuery = ref('');
+    const lang = ref('en');
+    const sidebarOpen = ref(false);
+    const headings = ref([]);
+    const searchInput = ref(null);
+
+    const searchResults = computed(() => {
+      if (!searchQuery.value.trim()) return [];
+      const q = searchQuery.value.toLowerCase();
+      return headings.value.filter(h => h.text.toLowerCase().includes(q));
+    });
+
+    function toggleSearch() {
+      searchOpen.value = !searchOpen.value;
+      if (searchOpen.value) {
+        nextTick(() => {
+          if (searchInput.value) searchInput.value.focus();
+        });
+      } else {
+        searchQuery.value = '';
+      }
     }
 
-    const linkText = h2.textContent;
+    function syncHeadings() {
+      const h2s = document.querySelectorAll('h2');
+      const list = [];
+      h2s.forEach((h2, idx) => {
+        if (!h2.id) h2.id = 'section-' + idx;
+        list.push({ id: h2.id, text: h2.textContent });
+      });
+      headings.value = list;
+    }
 
-    // 创建桌面端链接
-    const desktopLink = document.createElement("a");
-    desktopLink.href = "#" + h2.id;
-    desktopLink.textContent = linkText;
-    desktopLink.className = "nav-text-link";
-    desktopNav.appendChild(desktopLink);
+    function setLang(newLang) {
+      lang.value = newLang;
+      document.documentElement.setAttribute('data-lang', newLang);
+      document.documentElement.classList.toggle('chinese-font', newLang === 'zh');
+      localStorage.setItem('lang', newLang);
+      applyTranslations(newLang);
+      nextTick(() => syncHeadings());
+    }
 
-    // 创建侧边栏链接
-    const sidebarLink = document.createElement("a");
-    sidebarLink.href = "#" + h2.id;
-    sidebarLink.textContent = linkText;
-    sidebarLink.className = "nav-text-link";
-    sidebar.appendChild(sidebarLink);
+    function toggleLang() {
+      setLang(lang.value === 'en' ? 'zh' : 'en');
+    }
 
-    // 点击链接时平滑滚动，并在小屏时自动关闭侧边栏
-    const clickHandler = (e) => {
-      e.preventDefault();
-      // 考虑到 fixed navbar 会遮挡内容，可以加上 navbar 的高度 (100px) 偏移
-      const targetPosition = h2.getBoundingClientRect().top + window.scrollY - 120;
-      window.scrollTo({ top: targetPosition, behavior: "smooth" });
-      
-      sidebar.classList.remove("open");
+    function toggleSidebar() {
+      sidebarOpen.value = !sidebarOpen.value;
+    }
+
+    function scrollTo(heading) {
+      const el = document.getElementById(heading.id);
+      if (el) {
+        const section = el.closest('.hidden-section');
+        if (section) {
+          section.classList.remove('hidden-section');
+          section.classList.add('revealed');
+        }
+        nextTick(() => {
+          const pos = el.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top: pos, behavior: 'smooth' });
+        });
+      }
+      sidebarOpen.value = false;
+    }
+
+    function goToResult(result) {
+      scrollTo(result);
+      searchOpen.value = false;
+      searchQuery.value = '';
+    }
+
+    onMounted(() => {
+      syncHeadings();
+      const saved = localStorage.getItem('lang');
+      if (saved === 'zh') setLang('zh');
+      else document.documentElement.setAttribute('data-lang', 'en');
+    });
+
+    document.addEventListener('click', (e) => {
+      const appEl = document.getElementById('navbarApp');
+      if (!appEl) return;
+      if (!appEl.contains(e.target)) {
+        searchOpen.value = false;
+        sidebarOpen.value = false;
+      }
+    });
+
+    return {
+      searchOpen, searchQuery, lang, sidebarOpen,
+      headings, searchResults, searchInput,
+      toggleSearch, toggleLang, toggleSidebar, scrollTo, goToResult
     };
+  }
+});
 
-    desktopLink.addEventListener("click", clickHandler);
-    sidebarLink.addEventListener("click", clickHandler);
+navbarApp.mount('#navbarApp');
+
+// ====== Nade Instructions 表格交互 ======
+document.addEventListener('DOMContentLoaded', () => {
+  const tableContainer = document.querySelector('.nade-info-table').closest('.table-container');
+  if (!tableContainer) return;
+  const allRows = tableContainer.querySelectorAll('tbody tr');
+
+  // Map nade button data-type to table row index
+  const typeToRow = {
+    flashbang: 0,
+    hegrenade: 1,
+    smoke: 2,
+    molotov: 3
+  };
+
+  document.querySelectorAll('.nade-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.getAttribute('data-type');
+      const rowIdx = typeToRow[type];
+      if (rowIdx === undefined) return;
+
+      tableContainer.classList.remove('hidden');
+      allRows.forEach((row, i) => {
+        row.style.display = (i === rowIdx) ? '' : 'none';
+      });
+
+      // Scroll to the table
+      tableContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   });
+});
 
-  // 5. 点击汉堡按钮展示/隐藏侧边栏
-  if (sidebarBtn) {
-    sidebarBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // 防止冒泡触发点击空白处关闭
-      sidebar.classList.toggle("open");
+// ====== 登录 / 注册逻辑 ======
+document.addEventListener('DOMContentLoaded', () => {
+  const authModal = document.getElementById('authModal');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const loginTriggerBtn = document.getElementById('loginTriggerBtn');
+  const closeAuth = document.getElementById('closeAuth');
+  const toReg = document.getElementById('toReg');
+  const toLogin = document.getElementById('toLogin');
+  const doLogin = document.getElementById('doLogin');
+  const doReg = document.getElementById('doReg');
+  const loginUser = document.getElementById('loginUser');
+  const loginPass = document.getElementById('loginPass');
+  const regName = document.getElementById('regName');
+  const regUser = document.getElementById('regUser');
+  const regPass = document.getElementById('regPass');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const userProfile = document.getElementById('userProfile');
+  const userNameDisplay = document.getElementById('userNameDisplay');
+
+  // 弹窗切换
+  if (loginTriggerBtn) {
+    loginTriggerBtn.addEventListener('click', () => authModal.classList.remove('hidden'));
+  }
+  if (closeAuth) {
+    closeAuth.addEventListener('click', () => authModal.classList.add('hidden'));
+  }
+  if (toReg) {
+    toReg.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+    });
+  }
+  if (toLogin) {
+    toLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
     });
   }
 
-  // 点击页面其他区域自动关闭侧边栏
-  document.addEventListener("click", (e) => {
-    if (!sidebar.contains(e.target) && sidebarBtn && !sidebarBtn.contains(e.target)) {
-      sidebar.classList.remove("open");
-    }
-  });
-});
+  // 注册
+  if (doReg) {
+    doReg.addEventListener('click', () => {
+      const user = regUser.value.trim();
+      const pass = regPass.value.trim();
 
+      if (!user || !pass) return alert(__t('fillAllFields'));
 
+      let users = JSON.parse(localStorage.getItem('cs_users')) || [];
+      if (users.find(u => u.username === user)) return alert(__t('userExists'));
 
+      users.push({ username: user, password: pass });
+      localStorage.setItem('cs_users', JSON.stringify(users));
+      alert(__t('regSuccess'));
 
+      // 切回登录界面
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      loginUser.value = user;
+      loginPass.value = '';
+    });
+  }
 
+  // 登录
+  if (doLogin) {
+    doLogin.addEventListener('click', () => {
+      const user = loginUser.value.trim();
+      const pass = loginPass.value.trim();
 
+      if (!user || !pass) return alert(__t('fillAllFields'));
 
+      let users = JSON.parse(localStorage.getItem('cs_users')) || [];
+      const found = users.find(u => u.username === user && u.password === pass);
 
-// 处理头像转 Base64 字符串存储
-let avatarBase64 = "assets/default-avatar.png";
-document.getElementById('regAvatar').addEventListener('change', function(e) {
-    const reader = new FileReader();
-    reader.onload = function() { avatarBase64 = reader.result; };
-    reader.readAsDataURL(e.target.files[0]);
-});
-
-// 注册逻辑
-document.getElementById('doReg').addEventListener('click', () => {
-    const user = document.getElementById('regUser').value;
-    const pass = document.getElementById('regPass').value;
-    
-    if(!user || !pass) return alert("Please fill all fields");
-
-    let users = JSON.parse(localStorage.getItem('cs_users')) || [];
-    if(users.find(u => u.username === user)) return alert("User exists");
-
-    users.push({ username: user, password: pass, avatar: avatarBase64 });
-    localStorage.setItem('cs_users', JSON.stringify(users));
-    alert("Success! Please login.");
-    document.getElementById('toLogin').click();
-});
-
-// 登录逻辑
-document.getElementById('doLogin').addEventListener('click', () => {
-    const user = document.getElementById('loginUser').value;
-    const pass = document.getElementById('loginPass').value;
-    
-    let users = JSON.parse(localStorage.getItem('cs_users')) || [];
-    const found = users.find(u => u.username === user && u.password === pass);
-
-    if(found) {
+      if (found) {
         localStorage.setItem('cs_current_user', JSON.stringify(found));
-        location.reload(); // 刷新页面以更新 UI
-    } else {
-        alert("Invalid credentials");
-    }
+        authModal.classList.add('hidden');
+        applyAuthState(found);
+      } else {
+        alert(__t('invalidCreds'));
+      }
+    });
+  }
+
+  // 退出登录
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('cs_current_user');
+      location.reload();
+    });
+  }
+
+  // 应用登录状态到 UI
+  function applyAuthState(user) {
+    if (loginTriggerBtn) loginTriggerBtn.classList.add('hidden');
+    if (userProfile) userProfile.classList.remove('hidden');
+    if (userNameDisplay) userNameDisplay.textContent = user.username;
+  }
+
+  // 页面加载时检查状态
+  const savedUser = JSON.parse(localStorage.getItem('cs_current_user'));
+  if (savedUser) {
+    applyAuthState(savedUser);
+  }
 });
-
-// 页面加载时检查状态
-function checkAuth() {
-    const user = JSON.parse(localStorage.getItem('cs_current_user'));
-    if(user) {
-        document.getElementById('loginTriggerBtn').classList.add('hidden');
-        document.getElementById('userProfile').classList.remove('hidden');
-        document.getElementById('userNameDisplay').textContent = user.username;
-        document.getElementById('userAvatar').src = user.avatar;
-    }
-}
-checkAuth();
-
-// 退出登录
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('cs_current_user');
-    location.reload();
-});
-
-// 弹窗切换逻辑（显示/隐藏）
-document.getElementById('loginTriggerBtn').onclick = () => document.getElementById('authModal').classList.remove('hidden');
-document.getElementById('closeAuth').onclick = () => document.getElementById('authModal').classList.add('hidden');
-document.getElementById('toReg').onclick = () => {
-    document.getElementById('loginForm').classList.add('hidden');
-    document.getElementById('registerForm').classList.remove('hidden');
-};
-document.getElementById('toLogin').onclick = () => {
-    document.getElementById('registerForm').classList.add('hidden');
-    document.getElementById('loginForm').classList.remove('hidden');
-};
 
 
 
