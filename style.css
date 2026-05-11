@@ -1211,3 +1211,256 @@ html.chinese-font .type-tab {
 .table-container.hidden {
   display: none;
 }
+
+/* ====== 收藏按钮样式 ====== */
+.fav-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 2.5em;
+  height: 2.5em;
+  min-width: 32px;
+  min-height: 32px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  z-index: 20;
+  padding: 0;
+  outline: none;
+}
+
+.fav-btn:hover {
+  background: rgba(225, 29, 72, 0.35);
+  border-color: rgba(225, 29, 72, 0.6);
+  transform: scale(1.1);
+}
+
+.fav-btn .fav-icon {
+  width: 55%;
+  height: 55%;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  transition: all 0.25s ease;
+}
+
+.fav-btn.favorited {
+  background: rgba(225, 29, 72, 0.6);
+  border-color: #e11d48;
+}
+
+.fav-btn.favorited .fav-icon {
+  fill: #e11d48;
+  stroke: #e11d48;
+}
+
+/* Nade carousel fav button */
+.nade-fav-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}
+
+/* Player media fav button */
+.player-fav-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}
+
+.media-fav-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 0;
+}
+
+.media-fav-wrapper .media-content-element {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .fav-btn {
+    width: 2.2em;
+    height: 2.2em;
+    min-width: 28px;
+    min-height: 28px;
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fav-btn {
+    width: 2em;
+    height: 2em;
+    min-width: 24px;
+    min-height: 24px;
+    bottom: 6px;
+    right: 6px;
+  }
+}
+
+/* ====== 收藏展示区域样式 ====== */
+#favorites-section {
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 30px;
+}
+
+#favorites-section h2 {
+  margin-top: 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 2rem;
+}
+
+.fav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.fav-tab {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-chakra-petch);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.fav-tab:hover {
+  border-color: #e11d48;
+  transform: translateY(-2px);
+}
+
+.fav-tab.active {
+  background-color: #e11d48;
+  border-color: #e11d48;
+  box-shadow: 0 4px 10px rgba(225, 29, 72, 0.4);
+}
+
+.fav-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.fav-content.hidden {
+  display: none !important;
+}
+
+.fav-card {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.fav-card:hover {
+  border-color: rgba(225, 29, 72, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.fav-card video,
+.fav-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background-color: #000;
+}
+
+.fav-card-body {
+  padding: 15px;
+}
+
+.fav-card-title {
+  color: #ffffff;
+  font-family: var(--font-chakra-petch);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.fav-card-meta {
+  color: #888;
+  font-size: 0.8rem;
+  font-family: var(--font-chakra-petch);
+}
+
+.fav-card-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  transition: all 0.2s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.fav-card-remove:hover {
+  background: #e11d48;
+  border-color: #e11d48;
+}
+
+.fav-empty {
+  text-align: center;
+  color: #888;
+  font-family: var(--font-chakra-petch);
+  font-size: 1rem;
+  padding: 40px 20px;
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  #favorites-section {
+    padding: 20px 15px;
+  }
+  .fav-content {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+  }
+  .fav-tab {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fav-content {
+    grid-template-columns: 1fr;
+  }
+}

@@ -160,6 +160,11 @@
                 your browser does not support the video tag.
               </video>
             </div>
+            <button class="fav-btn nade-fav-btn" title="Add to favorites" aria-label="Add to favorites">
+              <svg class="fav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </button>
           </div>
 
           <button class="carousel-btn next-btn">
@@ -304,6 +309,15 @@
               </div>
           </div>
         </section>
+<div class="hidden-section" id="favorites-section">
+          <h2 data-i18n="myFavorites">My Favorites</h2>
+          <div class="fav-tabs">
+            <button class="fav-tab active" data-fav-tab="props" data-i18n="myFavProps">Props</button>
+            <button class="fav-tab" data-fav-tab="players" data-i18n="myFavPlayers">Players</button>
+          </div>
+          <div class="fav-content" id="favPropsList"></div>
+          <div class="fav-content hidden" id="favPlayersList"></div>
+        </div>
 <div class="hidden-section" id="how-to-use-section">
        <h2 data-i18n="howToUse">How to use CSwPROP?</h2>
         <section class="usage-guide">
@@ -432,27 +446,35 @@
       let currentCategory = 'mvp';
 
       function renderMediaContent(player, category) {
-        mediaContentWrapper.innerHTML = ''; 
-        
+        mediaContentWrapper.innerHTML = '';
+
         if (!playerMediaDatabase[player] || !playerMediaDatabase[player][category]) {
           mediaContentWrapper.innerHTML = '<p class="media-description" style="border-left-color: gray;">'+__t('sectionComingSoon')+'</p>';
           return;
         }
 
         const data = playerMediaDatabase[player][category];
-        
+
         if (data.type === 'video') {
           mediaContentWrapper.innerHTML += `
-            <video class="media-content-element" controls autoplay loop muted>
-              <source src="${data.src}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
+            <div class="media-fav-wrapper">
+              <video class="media-content-element" controls autoplay loop muted>
+                <source src="${data.src}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <button class="fav-btn player-fav-btn" data-fav-type="player" data-fav-player="${player}" data-fav-category="${category}" data-fav-src="${data.src}" data-fav-desc="${data.desc}" title="Add to favorites" aria-label="Add to favorites">
+                <svg class="fav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </button>
+            </div>
           `;
         } else if (data.type === 'image') {
           mediaContentWrapper.innerHTML += `<img src="${data.src}" alt="${player} ${category}" class="media-content-element">`;
         }
 
         mediaContentWrapper.innerHTML += `<p class="media-description">${data.desc}</p>`;
+        refreshPlayerFavButtons();
       }
 
       playerCards.forEach(card => {
@@ -789,6 +811,10 @@ const i18nText = {
     fillAllFields:'Please fill all fields',userExists:'User exists',
     regSuccess:'Success! Please login.',invalidCreds:'Invalid credentials',
     fontTooltip:'Switch to Chinese',playerHighlights:'{0} Highlights',
+    myFavorites:'My Favorites',myFavProps:'Props',myFavPlayers:'Players',
+    noFavProps:'No favorite props yet. Browse maps and click the heart icon on videos!',
+    noFavPlayers:'No favorite player videos yet. Browse player details and click the heart icon!',
+    favRemoved:'Removed from favorites',
   },
   zh: {
     login:'登录',logout:'退出',username:'用户名',
@@ -823,6 +849,10 @@ const i18nText = {
     validationPassed:'验证通过！表单即将提交。',fillAllFields:'请填写所有字段',
     userExists:'用户已存在',regSuccess:'注册成功！请登录。',invalidCreds:'用户名或密码错误',
     fontTooltip:'切换到英文',playerHighlights:'{0} 精彩集锦',
+    myFavorites:'我的收藏',myFavProps:'道具',myFavPlayers:'选手',
+    noFavProps:'暂无收藏的道具。浏览地图并点击视频上的心形图标！',
+    noFavPlayers:'暂无收藏的选手视频。浏览选手详情并点击心形图标！',
+    favRemoved:'已取消收藏',
   }
 };
 
@@ -1102,10 +1132,231 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ====== 收藏系统 ======
+const FAVORITES_KEY = 'cs_favorites';
 
+function getFavorites() {
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.props && parsed.players) return parsed;
+    }
+  } catch (e) { /* corrupted data, reset */ }
+  return { props: [], players: [] };
+}
 
+function saveFavorites(favs) {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+}
 
-    </script>
+function makePropFavId() {
+  return activeMapId + '|' + activeNadeType + '|' + currentVideoIndex;
+}
+
+function makePropFavData() {
+  var mapNames = { dust2:'Dust II', mirage:'Mirage', inferno:'Inferno', nuke:'Nuke' };
+  return {
+    id: makePropFavId(),
+    mapId: activeMapId,
+    mapName: mapNames[activeMapId] || activeMapId,
+    nadeType: activeNadeType,
+    src: currentVideoArray[currentVideoIndex],
+    label: (mapNames[activeMapId] || activeMapId) + ' - ' + activeNadeType + ' #' + (currentVideoIndex + 1),
+    addedAt: new Date().toISOString()
+  };
+}
+
+function makePlayerFavId(player, category) {
+  return player + '|' + category;
+}
+
+function makePlayerFavData(player, category, src, desc) {
+  var catLabels = { mvp:'mvpMoments', funny:'funnyTimes', memes:'memesPictures' };
+  return {
+    id: makePlayerFavId(player, category),
+    playerName: player,
+    category: category,
+    catLabel: catLabels[category] || category,
+    type: 'video',
+    src: src,
+    desc: desc || '',
+    label: player + ' - ' + __t(catLabels[category] || category),
+    addedAt: new Date().toISOString()
+  };
+}
+
+function isPropFavorited() {
+  if (!activeMapId || !currentVideoArray.length) return false;
+  var favs = getFavorites();
+  var id = makePropFavId();
+  return favs.props.some(function(p) { return p.id === id; });
+}
+
+function isPlayerFavorited(player, category) {
+  var favs = getFavorites();
+  var id = makePlayerFavId(player, category);
+  return favs.players.some(function(p) { return p.id === id; });
+}
+
+function togglePropFav() {
+  if (!activeMapId || !currentVideoArray.length) return;
+  var favs = getFavorites();
+  var id = makePropFavId();
+  var idx = favs.props.findIndex(function(p) { return p.id === id; });
+  if (idx >= 0) {
+    favs.props.splice(idx, 1);
+  } else {
+    favs.props.push(makePropFavData());
+  }
+  saveFavorites(favs);
+  refreshNadeFavButton();
+}
+
+function togglePlayerFav(player, category, src, desc) {
+  var favs = getFavorites();
+  var id = makePlayerFavId(player, category);
+  var idx = favs.players.findIndex(function(p) { return p.id === id; });
+  if (idx >= 0) {
+    favs.players.splice(idx, 1);
+  } else {
+    favs.players.push(makePlayerFavData(player, category, src, desc));
+  }
+  saveFavorites(favs);
+  refreshPlayerFavButtons();
+}
+
+function refreshNadeFavButton() {
+  var btn = document.querySelector('.nade-fav-btn');
+  if (!btn) return;
+  if (isPropFavorited()) {
+    btn.classList.add('favorited');
+  } else {
+    btn.classList.remove('favorited');
+  }
+}
+
+function refreshPlayerFavButtons() {
+  var btns = document.querySelectorAll('.player-fav-btn');
+  btns.forEach(function(btn) {
+    var player = btn.getAttribute('data-fav-player');
+    var category = btn.getAttribute('data-fav-category');
+    if (isPlayerFavorited(player, category)) {
+      btn.classList.add('favorited');
+    } else {
+      btn.classList.remove('favorited');
+    }
+  });
+}
+
+// Nade carousel fav button click
+document.addEventListener('DOMContentLoaded', function() {
+  var nadeFavBtn = document.querySelector('.nade-fav-btn');
+  if (nadeFavBtn) {
+    nadeFavBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      togglePropFav();
+    });
+  }
+});
+
+// Player fav button clicks (delegated)
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.player-fav-btn');
+  if (!btn) return;
+  e.stopPropagation();
+  var player = btn.getAttribute('data-fav-player');
+  var category = btn.getAttribute('data-fav-category');
+  var src = btn.getAttribute('data-fav-src');
+  var desc = btn.getAttribute('data-fav-desc');
+  togglePlayerFav(player, category, src, desc);
+});
+
+// ====== 收藏展示区域逻辑 ======
+function renderFavList(tab) {
+  var containerId = tab === 'props' ? 'favPropsList' : 'favPlayersList';
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var favs = getFavorites();
+  var items = tab === 'props' ? favs.props : favs.players;
+
+  if (!items.length) {
+    var emptyKey = tab === 'props' ? 'noFavProps' : 'noFavPlayers';
+    container.innerHTML = '<div class="fav-empty">' + __t(emptyKey) + '</div>';
+    return;
+  }
+
+  var html = '';
+  items.forEach(function(item) {
+    html += '<div class="fav-card">';
+    html += '<video controls muted preload="metadata"><source src="' + item.src + '" type="video/mp4"></video>';
+    html += '<button class="fav-card-remove" data-fav-remove="' + tab + '" data-fav-id="' + item.id + '" title="Remove">&times;</button>';
+    html += '<div class="fav-card-body">';
+    html += '<div class="fav-card-title">' + item.label + '</div>';
+    if (tab === 'props') {
+      html += '<div class="fav-card-meta">' + item.mapName + ' &middot; ' + item.nadeType + '</div>';
+    } else {
+      html += '<div class="fav-card-meta">' + __t(item.catLabel) + '</div>';
+      if (item.desc) {
+        html += '<div class="fav-card-meta" style="margin-top:4px;color:#aaa;">' + item.desc + '</div>';
+      }
+    }
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+// Remove favorite
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-fav-remove]');
+  if (!btn) return;
+  e.stopPropagation();
+  var tab = btn.getAttribute('data-fav-remove');
+  var id = btn.getAttribute('data-fav-id');
+  var favs = getFavorites();
+  var list = tab === 'props' ? favs.props : favs.players;
+  var idx = list.findIndex(function(item) { return item.id === id; });
+  if (idx >= 0) {
+    list.splice(idx, 1);
+    saveFavorites(favs);
+    renderFavList(tab);
+    refreshNadeFavButton();
+    refreshPlayerFavButtons();
+  }
+});
+
+// Favorites tab switching
+document.addEventListener('DOMContentLoaded', function() {
+  var favTabs = document.querySelectorAll('.fav-tab');
+  var favPropsList = document.getElementById('favPropsList');
+  var favPlayersList = document.getElementById('favPlayersList');
+
+  favTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      favTabs.forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      var tabType = this.getAttribute('data-fav-tab');
+      if (tabType === 'props') {
+        favPropsList.classList.remove('hidden');
+        favPlayersList.classList.add('hidden');
+        renderFavList('props');
+      } else {
+        favPlayersList.classList.remove('hidden');
+        favPropsList.classList.add('hidden');
+        renderFavList('players');
+      }
+    });
+  });
+
+  // Refresh nade fav button after each carousel video change
+  var origRCV = renderCarouselView;
+  renderCarouselView = function() {
+    origRCV();
+    refreshNadeFavButton();
+  };
+});
+
+</script>
   </body>
 
 </html>
