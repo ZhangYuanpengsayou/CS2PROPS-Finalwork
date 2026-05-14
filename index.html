@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark" style="color-scheme: dark">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
   <body>
     <div id="authModal" class="auth-modal hidden">
     <div class="contact-form auth-container">
-        <button class="close-btn" id="closeAuth">&times;</button>
+        <button type="button" class="close-btn" id="closeAuth">&times;</button>
         
         <div id="loginForm">
             <h3 data-i18n="login">LOGIN</h3>
@@ -36,7 +36,7 @@
     <header class="navbar" id="navbarApp" v-cloak>
        <nav>
       <div class="logo-container">
-        <img src="assets/Map image/logo.png" alt="CS2 Props Logo" class="logo-image">
+        <img src="assets/Map image/logo.png" alt="CS2 Props Logo" class="logo-image" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer">
       </div>
 
       <div class="desktop-nav-links">
@@ -46,10 +46,10 @@
       <div class="menu" >
         <div class="menu">
     <div id="userArea" class="user-area">
-        <button id="loginTriggerBtn" class="nav-text-link" data-i18n="login">LOGIN</button>
+        <button type="button" id="loginTriggerBtn" class="nav-text-link" data-i18n="login">LOGIN</button>
         <div id="userProfile" class="user-profile hidden">
-            <span id="userNameDisplay" class="nav-text-link">Username</span>
-            <button id="logoutBtn" class="logout-mini-btn" data-i18n="logout">LOGOUT</button>
+            <span id="userNameDisplay">Username</span>
+            <button type="button" id="logoutBtn" class="logout-mini-btn" data-i18n="logout">LOGOUT</button>
         </div>
     </div>
 </div>
@@ -79,6 +79,22 @@
             <path d="M14 18h6"></path>
           </svg>
         </button>
+        <button @click="toggleTheme" class="theme-toggle-btn" :title="theme === 'dark' ? 'Switch to Light Mode' : '切换到深色模式'" :aria-label="theme === 'dark' ? 'Switch to Light Mode' : '切换到深色模式'" data-i18n-title="themeTooltip">
+          <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+          </svg>
+        </button>
         <button @click="toggleSidebar" class="hamburger-btn" aria-label="Menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="4" x2="20" y1="12" y2="12"></line>
@@ -105,69 +121,69 @@
       <section class="select-map">
         <h2 data-i18n="nadeLineups">Nade lineups</h2>
         <div class="map-list">
-          <a class="map-button" href="javascript:void(0)" id="dust2">
+          <button type="button" class="map-button" id="dust2">
             <div class="aspect-video-relative">
               <img alt="Dust II Map Overview" fetchpriority="high" decoding="async" data-nimg="fill"  style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="33vw" src="assets\Map image\dust2.webp">
               <div class="map-name">
                 <h3>Dust II</h3>
               </div>
             </div>
-          </a>  
-          <a class="map-button" href="javascript:void(0)" id="mirage">
+          </button>
+          <button type="button" class="map-button" id="mirage">
             <div class="aspect-video-relative">
               <img alt="Mirage Map Overview" fetchpriority="high" decoding="async" data-nimg="fill"  style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="33vw" src="assets\Map image\mirage.webp">
               <div class="map-name">
                 <h3>Mirage</h3>
               </div>
             </div>
-          </a> 
-          <a class="map-button" href="javascript:void(0)" id="inferno">
+          </button>
+          <button type="button" class="map-button" id="inferno">
             <div class="aspect-video-relative">
               <img alt="Inferno Map Overview" fetchpriority="high" decoding="async" data-nimg="fill"  style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="33vw" src="assets\Map image\inferno.webp">
               <div class="map-name">
                 <h3>Inferno</h3>
               </div>
             </div>
-          </a>           
-          <a class="map-button" href="javascript:void(0)" id="nuke">
+          </button>
+          <button type="button" class="map-button" id="nuke">
             <div class="aspect-video-relative">
               <img alt="Nuke Map Overview" fetchpriority="high" decoding="async" data-nimg="fill"  style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" sizes="33vw" src="assets\Map image\nuke.webp">
               <div class="map-name">
                 <h3>Nuke</h3>
               </div>
             </div>
-          </a>           
+          </button>
         </div>
 
         <div id="nade-type-selection" class="nade-type-tabs" style="display: none;">
-          <button class="type-tab active" data-type="Flashbang" data-i18n="flashbang">Flashbang</button>
-          <button class="type-tab" data-type="Smoke" data-i18n="smoke">Smoke</button>
-          <button class="type-tab" data-type="Molotov" data-i18n="molotov">Molotov</button>
-          <button class="type-tab" data-type="HEGrenade" data-i18n="hegrenade">HE Grenade</button>
+          <button type="button" class="type-tab active" data-type="Flashbang" data-i18n="flashbang">Flashbang</button>
+          <button type="button" class="type-tab" data-type="Smoke" data-i18n="smoke">Smoke</button>
+          <button type="button" class="type-tab" data-type="Molotov" data-i18n="molotov">Molotov</button>
+          <button type="button" class="type-tab" data-type="HEGrenade" data-i18n="hegrenade">HE Grenade</button>
         </div>
 
         <div class="nade-video-carousel" style="display: none;">
-          <button class="carousel-btn prev-btn">
+          <button type="button" class="carousel-btn prev-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          
+
           <div class="carousel-video-wrapper">
             <div class="video-transition-container">
               <video class="carousel-video" controls autoplay loop muted>
                 your browser does not support the video tag.
               </video>
             </div>
-            <button class="fav-btn nade-fav-btn" title="Add to favorites" aria-label="Add to favorites">
+            <button type="button" class="fav-btn nade-fav-btn" title="Add to favorites" aria-label="Add to favorites">
               <svg class="fav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             </button>
           </div>
 
-          <button class="carousel-btn next-btn">
+          <button type="button" class="carousel-btn next-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -181,20 +197,20 @@
         <h2 data-i18n="nadeInstructions">Nade Instructions</h2>
       <section class="nade-selector">
             <div class="nade-list">
-                <button class="nade-button" data-type="flashbang">
-                    <img src="assets/icons/flashbang.webp" alt="Flashbang">
+                <button type="button" class="nade-button" data-type="flashbang">
+                    <img src="assets/Image/Props/Flashbang.png" alt="Flashbang">
                     <span data-i18n="flashbang">Flashbang</span>
                 </button>
-                <button class="nade-button" data-type="hegrenade">
-                    <img src="assets/icons/hegrenade.webp" alt="He Grenade">
+                <button type="button" class="nade-button" data-type="hegrenade">
+                    <img src="assets/Image/Props/Hegrenade.png" alt="He Grenade">
                     <span data-i18n="hegrenade">He Grenade</span>
                 </button>
-                <button class="nade-button" data-type="smoke">
-                    <img src="assets/icons/smoke.webp" alt="smoke">
+                <button type="button" class="nade-button" data-type="smoke">
+                    <img src="assets/Image/Props/Smoke.png" alt="smoke">
                     <span data-i18n="smoke">Smoke</span>
                 </button>
-                <button class="nade-button" data-type="molotov">
-                    <img src="assets/icons/molotov.webp" alt="Molotov">
+                <button type="button" class="nade-button" data-type="molotov">
+                    <img src="assets/Image/Props/Molotov.png" alt="Molotov">
                     <span data-i18n="molotov">Molotov</span>
                 </button>
             <div class="table-container hidden">
@@ -235,7 +251,7 @@
         <h2 data-i18n="playerIntro">Player Introduction</h2>
         <section class="player-carousel-section">
           <div class="player-carousel">
-            <button class="carousel-btn" id="prev-player" aria-label="Previous player">
+            <button type="button" class="carousel-btn" id="prev-player" aria-label="Previous player">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -246,27 +262,27 @@
               
               <article class="player-card" data-player="s1mple">
                 <div class="player-image">
-                  <img src="assets/players/player1.webp" alt="Player 1">
+                  <img src="assets/Image/Players/S1mple/imgOfPlayer/359e1f7fb8a538162484c1383606ac13.png" alt="s1mple">
                 </div>
                 <div class="player-info">
                   <h3>s1mple</h3>
                   <p data-i18n="awperStar">AWPer / Star Player</p>
                 </div>
               </article>
-        
+
               <article class="player-card" data-player="ZywOo">
                 <div class="player-image">
-                  <img src="assets/players/player2.webp" alt="Player 2">
+                  <img src="assets/Image/Players/Zywoo/imgOfPlayer/46116b910a1ec1cde03f5d75d213c813.png" alt="ZywOo">
                 </div>
                 <div class="player-info">
                   <h3>ZywOo</h3>
                   <p data-i18n="awperClutch">AWPer / Clutch King</p>
                 </div>
               </article>
-        
+
               <article class="player-card" data-player="NiKo">
                 <div class="player-image">
-                  <img src="assets/players/player3.webp" alt="Player 3">
+                  <img src="assets/Image/Players/Niko/imgOfPlayer/f27b7fde36e7831d5b491297939467a9.png" alt="NiKo">
                 </div>
                 <div class="player-info">
                   <h3>NiKo</h3>
@@ -276,7 +292,7 @@
 
               <article class="player-card" data-player="m0NESY">
                 <div class="player-image">
-                  <img src="assets/players/player4.webp" alt="Player 4">
+                  <img src="assets/Image/Players/Monesy/imgOfPlayer/e8acbd633190d341c415848d252d8e07.png" alt="m0NESY">
                 </div>
                 <div class="player-info">
                   <h3>m0NESY</h3>
@@ -286,7 +302,7 @@
 
               </div>
         
-            <button class="carousel-btn" id="next-player" aria-label="Next player">
+            <button type="button" class="carousel-btn" id="next-player" aria-label="Next player">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -296,12 +312,12 @@
         </section>
 
         <section class="player-details-section" id="player-details" style="display: none;">
-          <h2 id="detail-player-name">Player Name</h2>
+          <h3 id="detail-player-name">Player Name</h3>
           
             <div class="media-tabs">
-              <button class="tab-btn active" data-category="mvp" data-i18n="mvpMoments">MVP Moments</button>
-              <button class="tab-btn" data-category="funny" data-i18n="funnyTimes">Funny Times</button>
-              <button class="tab-btn" data-category="memes" data-i18n="memesPictures">Memes & Pictures</button>
+              <button type="button" class="tab-btn active" data-category="mvp" data-i18n="mvpMoments">MVP Moments</button>
+              <button type="button" class="tab-btn" data-category="funny" data-i18n="funnyTimes">Funny Times</button>
+              <button type="button" class="tab-btn" data-category="memes" data-i18n="memesPictures">Memes & Pictures</button>
             </div>
 
           <div class="media-display-container">
@@ -312,8 +328,8 @@
 <div class="hidden-section" id="favorites-section">
           <h2 data-i18n="myFavorites">My Favorites</h2>
           <div class="fav-tabs">
-            <button class="fav-tab active" data-fav-tab="props" data-i18n="myFavProps">Props</button>
-            <button class="fav-tab" data-fav-tab="players" data-i18n="myFavPlayers">Players</button>
+            <button type="button" class="fav-tab active" data-fav-tab="props" data-i18n="myFavProps">Props</button>
+            <button type="button" class="fav-tab" data-fav-tab="players" data-i18n="myFavPlayers">Players</button>
           </div>
           <div class="fav-content" id="favPropsList"></div>
           <div class="fav-content hidden" id="favPlayersList"></div>
@@ -358,6 +374,45 @@
               <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#usageAccordion">
                 <div class="accordion-body" data-i18n="step3Body">
                   Click on a lineup to view detailed instructions and visuals.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="headingFour" style="margin-top: 0;">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" data-i18n="step4Title">
+                  Step 4: Create an Account
+                </button>
+              </h3>
+              <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#usageAccordion">
+                <div class="accordion-body" data-i18n="step4Body">
+                  Click the LOGIN button and switch to the Register tab. Fill in your name, username, and password, then click CREATE ACCOUNT.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="headingFive" style="margin-top: 0;">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" data-i18n="step5Title">
+                  Step 5: Log In to Your Account
+                </button>
+              </h3>
+              <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#usageAccordion">
+                <div class="accordion-body" data-i18n="step5Body">
+                  After registering, enter your username and password on the Login tab and click SIGN IN to access your personalized experience.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h3 class="accordion-header" id="headingSix" style="margin-top: 0;">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix" data-i18n="step6Title">
+                  Step 6: Explore &amp; Save Favorites
+                </button>
+              </h3>
+              <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#usageAccordion">
+                <div class="accordion-body" data-i18n="step6Body">
+                  Browse maps, watch nade lineups, check player highlights, and click the heart icon to save your favorite props and clips.
                 </div>
               </div>
             </div>
@@ -431,14 +486,24 @@
 
       const playerMediaDatabase = {
         'm0NESY': {
-          mvp: { type: 'video', src: 'assets/video/Players/Monesy/Mvp/monesy_1v4.mp4', desc: 'Incredible 1v4 clutch on Inferno! Pure mechanical skill.' },
-          funny: { type: 'video', src: 'assets/video/Players/Monesy/Funny time/monesy_fail.mp4', desc: 'm0NESY missing the easiest jump on Mirage.' },
-          memes: { type: 'image', src: 'assets/Image/Players/Monesy/funny picture/monesy_meme.webp', desc: 'When you drop the AWP to save but die anyway.' }
+          mvp: { type: 'video', src: 'assets/video/Players/Monesy/Mvp/1.mp4', desc: 'Incredible 1v4 clutch on Inferno! Pure mechanical skill.' },
+          funny: { type: 'video', src: 'assets/video/Players/Monesy/Funny time/2.mp4', desc: 'm0NESY missing the easiest jump on Mirage.' },
+          memes: { type: 'image', src: 'assets/Image/Players/Monesy/funny picture/3ed560319b5e38fe3f67000425ff2c2.png', desc: 'When you drop the AWP to save but die anyway.' }
+        },
+        'NiKo': {
+          mvp: { type: 'video', src: 'assets/video/Players/Niko/MVP/1.mp4', desc: 'NiKo deagle ace on Dust2.' },
+          funny: { type: 'video', src: 'assets/video/Players/Niko/Funny time/2.mp4', desc: 'NiKo funny moments.' },
+          memes: { type: 'image', src: 'assets/Image/Players/Niko/funny picture/5cdc5092daff1d0c451f0ad99f8e7cc.png', desc: 'NiKo chilling between matches.' }
+        },
+        'ZywOo': {
+          mvp: { type: 'video', src: 'assets/video/Players/Zywoo/Mvp/1.mp4', desc: 'ZywOo insane AWP ace on Mirage.' },
+          funny: { type: 'video', src: 'assets/video/Players/Zywoo/Funny time/2.mp4', desc: 'ZywOo laughing mid-round.' },
+          memes: { type: 'image', src: 'assets/Image/Players/Zywoo/funny picture/990f678d01ad53634e6d8dbe72c3250.png', desc: 'ZywOo looking confused at the screen.' }
         },
         's1mple': {
-          mvp: { type: 'video', src: '...', desc: 's1mple dropping the AWP for a noscope.' },
-          funny: { type: 'video', src: '...', desc: 'FPL raging moments.' },
-          memes: { type: 'image', src: '...', desc: 'The Undertaker of CS2.' }
+          mvp: { type: 'video', src: 'assets/video/Players/S1mple/MVP/1.mp4', desc: 's1mple dropping the AWP for a noscope.' },
+          funny: { type: 'video', src: 'assets/video/Players/S1mple/Funny time/2.mp4', desc: 'FPL raging moments.' },
+          memes: { type: 'image', src: 'assets/Image/Players/S1mple/funny picture/4f8a87b342ec8acbb831ce5509f655b.png', desc: 'The Undertaker of CS2.' }
         }
       };
 
@@ -462,7 +527,7 @@
                 <source src="${data.src}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
-              <button class="fav-btn player-fav-btn" data-fav-type="player" data-fav-player="${player}" data-fav-category="${category}" data-fav-src="${data.src}" data-fav-desc="${data.desc}" title="Add to favorites" aria-label="Add to favorites">
+              <button type="button" class="fav-btn player-fav-btn" data-fav-type="player" data-fav-player="${player}" data-fav-category="${category}" data-fav-src="${data.src}" data-fav-desc="${data.desc}" title="Add to favorites" aria-label="Add to favorites">
                 <svg class="fav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
@@ -634,28 +699,28 @@
       // 构建模拟数据库，存储各个地图、各个道具类型对应的视频路径
       const mapNadeDatabase = {
         dust2: {
-          Flashbang: ['assets/video/Maps/dust2/Flashbang/1.mp4', 'assets/video/Maps/dust2/Flashbang/flash2.mp4'],
-          Smoke: ['assets/video/Maps/dust2/Smoke/smoke1.mp4', 'assets/video/Maps/dust2/Smoke/smoke2.mp4', 'assets/video/Maps/dust2/Smoke/smoke3.mp4'],
-          Molotov: ['assets/video/Maps/dust2/Molotov/molo1.mp4'],
-          HEGrenade: ['assets/video/Maps/dust2/HEGrenade/he1.mp4', 'assets/video/Maps/dust2/HEGrenade/he2.mp4']
+          Flashbang: ['assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140146.mp4', 'assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140255.mp4', 'assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140345.mp4'],
+          Smoke: ['assets/video/Maps/dust2/Smoke/屏幕录制 2026-05-14 135829.mp4', 'assets/video/Maps/dust2/Smoke/屏幕录制 2026-05-14 135929.mp4', 'assets/video/Maps/dust2/Smoke/屏幕录制 2026-05-14 140043.mp4'],
+          Molotov: ['assets/video/Maps/dust2/Motolov/屏幕录制 2026-05-14 140440.mp4', 'assets/video/Maps/dust2/Motolov/屏幕录制 2026-05-14 140519.mp4', 'assets/video/Maps/dust2/Motolov/屏幕录制 2026-05-14 140600.mp4'],
+          HEGrenade: ['assets/video/Maps/dust2/Hegrenade/屏幕录制 2026-05-14 140658.mp4', 'assets/video/Maps/dust2/Hegrenade/屏幕录制 2026-05-14 140731.mp4']
         },
         mirage: {
-          Flashbang: ['assets/video/Maps/mirage/Flashbang/flash1.mp4'],
-          Smoke: ['assets/video/Maps/mirage/Smoke/smoke1.mp4', 'assets/video/Maps/mirage/Smoke/smoke2.mp4'],
-          Molotov: ['assets/video/Maps/mirage/Molotov/molo1.mp4', 'assets/video/Maps/mirage/Molotov/molo2.mp4'],
-          HEGrenade: ['assets/video/Maps/mirage/HEGrenade/he1.mp4']
+          Flashbang: ['assets/video/Maps/Mirage/Flashbang/屏幕录制 2026-05-14 141209.mp4', 'assets/video/Maps/Mirage/Flashbang/屏幕录制 2026-05-14 141254.mp4', 'assets/video/Maps/Mirage/Flashbang/屏幕录制 2026-05-14 141331.mp4'],
+          Smoke: ['assets/video/Maps/Mirage/Smoke/屏幕录制 2026-05-14 140936.mp4', 'assets/video/Maps/Mirage/Smoke/屏幕录制 2026-05-14 141027.mp4', 'assets/video/Maps/Mirage/Smoke/屏幕录制 2026-05-14 141103.mp4'],
+          Molotov: ['assets/video/Maps/Mirage/Motolov/屏幕录制 2026-05-14 141504.mp4', 'assets/video/Maps/Mirage/Motolov/屏幕录制 2026-05-14 141602.mp4', 'assets/video/Maps/Mirage/Motolov/屏幕录制 2026-05-14 141730.mp4'],
+          HEGrenade: ['assets/video/Maps/Mirage/Hegrenade/屏幕录制 2026-05-14 141831.mp4', 'assets/video/Maps/Mirage/Hegrenade/屏幕录制 2026-05-14 141906.mp4', 'assets/video/Maps/Mirage/Hegrenade/屏幕录制 2026-05-14 141943.mp4']
         },
         inferno: {
-          Flashbang: ['assets/video/Maps/inferno/Flashbang/flash1.mp4', 'assets/video/Maps/inferno/Flashbang/flash2.mp4'],
-          Smoke: ['assets/video/Maps/inferno/Smoke/smoke1.mp4'],
-          Molotov: ['assets/video/Maps/inferno/Molotov/molo1.mp4', 'assets/video/Maps/inferno/Molotov/molo2.mp4', 'assets/video/Maps/inferno/Molotov/molo3.mp4'],
-          HEGrenade: ['assets/video/Maps/inferno/HEGrenade/he1.mp4']
+          Flashbang: ['assets/video/Maps/Inferno/Flashbang/屏幕录制 2026-05-14 142508.mp4', 'assets/video/Maps/Inferno/Flashbang/屏幕录制 2026-05-14 142552.mp4', 'assets/video/Maps/Inferno/Flashbang/屏幕录制 2026-05-14 142625.mp4'],
+          Smoke: ['assets/video/Maps/Inferno/Smoke/屏幕录制 2026-05-14 142154.mp4', 'assets/video/Maps/Inferno/Smoke/屏幕录制 2026-05-14 142335.mp4', 'assets/video/Maps/Inferno/Smoke/屏幕录制 2026-05-14 142408.mp4'],
+          Molotov: ['assets/video/Maps/Inferno/Motolov/屏幕录制 2026-05-14 142737.mp4', 'assets/video/Maps/Inferno/Motolov/屏幕录制 2026-05-14 142836.mp4', 'assets/video/Maps/Inferno/Motolov/屏幕录制 2026-05-14 142913.mp4'],
+          HEGrenade: ['assets/video/Maps/Inferno/Hegrenade/屏幕录制 2026-05-14 143029.mp4', 'assets/video/Maps/Inferno/Hegrenade/屏幕录制 2026-05-14 143103.mp4', 'assets/video/Maps/Inferno/Hegrenade/屏幕录制 2026-05-14 143134.mp4']
         },
         nuke: {
-          Flashbang: ['assets/video/Maps/nuke/Flashbang/flash1.mp4'],
-          Smoke: ['assets/video/Maps/nuke/Smoke/smoke1.mp4', 'assets/video/Maps/nuke/Smoke/smoke2.mp4'],
-          Molotov: ['assets/video/Maps/nuke/Molotov/molo1.mp4'],
-          HEGrenade: ['assets/video/Maps/nuke/HEGrenade/he1.mp4', 'assets/video/Maps/nuke/HEGrenade/he2.mp4']
+          Flashbang: ['assets/video/Maps/Nuke/Flashbang/屏幕录制 2026-05-14 145134.mp4', 'assets/video/Maps/Nuke/Flashbang/屏幕录制 2026-05-14 145207.mp4', 'assets/video/Maps/Nuke/Flashbang/屏幕录制 2026-05-14 145242.mp4'],
+          Smoke: ['assets/video/Maps/Nuke/Smoke/屏幕录制 2026-05-14 144641.mp4', 'assets/video/Maps/Nuke/Smoke/屏幕录制 2026-05-14 144720.mp4', 'assets/video/Maps/Nuke/Smoke/屏幕录制 2026-05-14 144749.mp4'],
+          Molotov: ['assets/video/Maps/Nuke/Motolov/屏幕录制 2026-05-14 145351.mp4', 'assets/video/Maps/Nuke/Motolov/屏幕录制 2026-05-14 145447.mp4', 'assets/video/Maps/Nuke/Motolov/屏幕录制 2026-05-14 145529.mp4'],
+          HEGrenade: ['assets/video/Maps/Nuke/Hegrenade/屏幕录制 2026-05-14 145626.mp4', 'assets/video/Maps/Nuke/Hegrenade/屏幕录制 2026-05-14 145755.mp4', 'assets/video/Maps/Nuke/Hegrenade/屏幕录制 2026-05-14 145831.mp4']
         }
       };
 
@@ -684,15 +749,30 @@
 
         carouselVideoElement.classList.add('fade-out');
 
-        
-        setTimeout(() => {
-          carouselVideoElement.src = currentVideoArray[currentVideoIndex];
-          carouselVideoElement.play().catch(err => console.warn("Auto-play prevented by browser:", err));
-
+        var showVideo = function() {
+          carouselVideoElement.play().catch(function(err) { console.warn("Auto-play prevented by browser:", err); });
           carouselVideoElement.classList.remove('fade-out');
-
           renderIndicators();
-        }, 300); 
+        };
+
+        carouselVideoElement.src = currentVideoArray[currentVideoIndex];
+
+        var minDelay = setTimeout(function() {
+          if (carouselVideoElement.readyState >= 2) {
+            showVideo();
+          } else {
+            var onReady = function() {
+              carouselVideoElement.removeEventListener('canplay', onReady);
+              showVideo();
+            };
+            carouselVideoElement.addEventListener('canplay', onReady);
+            // safety timeout: show after 3s even if not loaded
+            setTimeout(function() {
+              carouselVideoElement.removeEventListener('canplay', onReady);
+              showVideo();
+            }, 3000);
+          }
+        }, 300);
       }
 
       function renderIndicators() {
@@ -724,12 +804,13 @@
       }
 
       mapButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          activeMapId = this.id; 
-          
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          activeMapId = this.id;
+
           typeTabsContainer.style.display = 'flex';
           videoCarousel.style.display = 'flex';
-          
+
           const activeTab = document.querySelector('.type-tab.active');
           activeNadeType = activeTab ? activeTab.getAttribute('data-type') : 'Flashbang';
 
@@ -740,7 +821,8 @@
       });
 
       nadeTypeTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
           nadeTypeTabs.forEach(t => t.classList.remove('active'));
           this.classList.add('active');
 
@@ -767,6 +849,7 @@
         });
       }
 
+
       // ====== Vue 导航栏应用 + 国际化 + 章节控制 ======
 const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
@@ -790,6 +873,9 @@ const i18nText = {
     step1Title:'Step 1: Select a Map',step1Body:'Click on a map to view available nade lineups.',
     step2Title:'Step 2: Filter by Grenade Type',step2Body:'Use the nade type selector to filter lineups by grenade type.',
     step3Title:'Step 3: View Instructions',step3Body:'Click on a lineup to view detailed instructions and visuals.',
+    step4Title:'Step 4: Create an Account',step4Body:'Click the LOGIN button and switch to the Register tab. Fill in your name, username, and password, then click CREATE ACCOUNT.',
+    step5Title:'Step 5: Log In to Your Account',step5Body:'After registering, enter your username and password on the Login tab and click SIGN IN to access your personalized experience.',
+    step6Title:'Step 6: Explore & Save Favorites',step6Body:'Browse maps, watch nade lineups, check player highlights, and click the heart icon to save your favorite props and clips.',
     yourName:'Your Name',yourEmail:'Your Email',feedbackType:'Feedback Type',
     selectOption:'Select an option',reportBug:'Report a Bug',requestFeature:'Request a Feature',
     generalFeedback:'General Feedback',yourMessage:'Your Message',
@@ -810,8 +896,9 @@ const i18nText = {
     validationPassed:'Validation passed! The form will be submitted.',
     fillAllFields:'Please fill all fields',userExists:'User exists',
     regSuccess:'Success! Please login.',invalidCreds:'Invalid credentials',
-    fontTooltip:'Switch to Chinese',playerHighlights:'{0} Highlights',
+    fontTooltip:'Switch to Chinese',themeTooltip:'Switch to Light Mode',playerHighlights:'{0} Highlights',
     myFavorites:'My Favorites',myFavProps:'Props',myFavPlayers:'Players',
+    loginRequired:'Please log in before adding favorites.',
     noFavProps:'No favorite props yet. Browse maps and click the heart icon on videos!',
     noFavPlayers:'No favorite player videos yet. Browse player details and click the heart icon!',
     favRemoved:'Removed from favorites',
@@ -830,6 +917,9 @@ const i18nText = {
     step1Title:'第一步：选择地图',step1Body:'点击地图查看可用的道具投掷点位。',
     step2Title:'第二步：按道具类型筛选',step2Body:'使用道具类型选择器按手雷类型筛选。',
     step3Title:'第三步：查看说明',step3Body:'点击投掷点位查看详细说明和演示。',
+    step4Title:'第四步：创建账号',step4Body:'点击登录按钮，切换到注册标签页。填写姓名、用户名和密码，然后点击创建账号。',
+    step5Title:'第五步：登录你的账号',step5Body:'注册完成后，在登录标签页输入用户名和密码，点击登录以访问你的个性化体验。',
+    step6Title:'第六步：探索并收藏',step6Body:'浏览地图，观看道具投掷视频，查看选手精彩集锦，点击心形图标收藏你喜欢的道具和视频。',
     yourName:'你的名字',yourEmail:'你的邮箱',feedbackType:'反馈类型',
     selectOption:'请选择',reportBug:'报告Bug',requestFeature:'请求功能',
     generalFeedback:'通用反馈',yourMessage:'你的消息',
@@ -848,8 +938,9 @@ const i18nText = {
     enterMessage:'请输入你的消息',messageTooShort:'至少需要10个字符',
     validationPassed:'验证通过！表单即将提交。',fillAllFields:'请填写所有字段',
     userExists:'用户已存在',regSuccess:'注册成功！请登录。',invalidCreds:'用户名或密码错误',
-    fontTooltip:'切换到英文',playerHighlights:'{0} 精彩集锦',
+    fontTooltip:'切换到英文',themeTooltip:'切换到浅色模式',playerHighlights:'{0} 精彩集锦',
     myFavorites:'我的收藏',myFavProps:'道具',myFavPlayers:'选手',
+    loginRequired:'请先登录再进行收藏操作。',
     noFavProps:'暂无收藏的道具。浏览地图并点击视频上的心形图标！',
     noFavPlayers:'暂无收藏的选手视频。浏览选手详情并点击心形图标！',
     favRemoved:'已取消收藏',
@@ -897,6 +988,7 @@ const navbarApp = createApp({
     const searchOpen = ref(false);
     const searchQuery = ref('');
     const lang = ref('en');
+    const theme = ref('dark');
     const sidebarOpen = ref(false);
     const headings = ref([]);
     const searchInput = ref(null);
@@ -941,6 +1033,16 @@ const navbarApp = createApp({
       setLang(lang.value === 'en' ? 'zh' : 'en');
     }
 
+    function applyTheme(newTheme) {
+      theme.value = newTheme;
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    function toggleTheme() {
+      applyTheme(theme.value === 'dark' ? 'light' : 'dark');
+    }
+
     function toggleSidebar() {
       sidebarOpen.value = !sidebarOpen.value;
     }
@@ -969,9 +1071,12 @@ const navbarApp = createApp({
 
     onMounted(() => {
       syncHeadings();
-      const saved = localStorage.getItem('lang');
-      if (saved === 'zh') setLang('zh');
+      const savedLang = localStorage.getItem('lang');
+      if (savedLang === 'zh') setLang('zh');
       else document.documentElement.setAttribute('data-lang', 'en');
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') applyTheme('light');
+      else applyTheme('dark');
     });
 
     document.addEventListener('click', (e) => {
@@ -984,9 +1089,9 @@ const navbarApp = createApp({
     });
 
     return {
-      searchOpen, searchQuery, lang, sidebarOpen,
+      searchOpen, searchQuery, lang, theme, sidebarOpen,
       headings, searchResults, searchInput,
-      toggleSearch, toggleLang, toggleSidebar, scrollTo, goToResult
+      toggleSearch, toggleLang, toggleTheme, toggleSidebar, scrollTo, goToResult
     };
   }
 });
@@ -1133,11 +1238,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ====== 收藏系统 ======
-const FAVORITES_KEY = 'cs_favorites';
+function getFavoritesKey() {
+  var user = JSON.parse(localStorage.getItem('cs_current_user'));
+  return user ? 'cs_favorites_' + user.username : null;
+}
 
 function getFavorites() {
+  var key = getFavoritesKey();
+  if (!key) return { props: [], players: [] };
   try {
-    const raw = localStorage.getItem(FAVORITES_KEY);
+    const raw = localStorage.getItem(key);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed.props && parsed.players) return parsed;
@@ -1147,7 +1257,9 @@ function getFavorites() {
 }
 
 function saveFavorites(favs) {
-  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+  var key = getFavoritesKey();
+  if (!key) return;
+  localStorage.setItem(key, JSON.stringify(favs));
 }
 
 function makePropFavId() {
@@ -1200,6 +1312,7 @@ function isPlayerFavorited(player, category) {
 }
 
 function togglePropFav() {
+  if (!getFavoritesKey()) { alert(__t('loginRequired')); return; }
   if (!activeMapId || !currentVideoArray.length) return;
   var favs = getFavorites();
   var id = makePropFavId();
@@ -1214,6 +1327,7 @@ function togglePropFav() {
 }
 
 function togglePlayerFav(player, category, src, desc) {
+  if (!getFavoritesKey()) { alert(__t('loginRequired')); return; }
   var favs = getFavorites();
   var id = makePlayerFavId(player, category);
   var idx = favs.players.findIndex(function(p) { return p.id === id; });
@@ -1290,7 +1404,7 @@ function renderFavList(tab) {
   items.forEach(function(item) {
     html += '<div class="fav-card">';
     html += '<video controls muted preload="metadata"><source src="' + item.src + '" type="video/mp4"></video>';
-    html += '<button class="fav-card-remove" data-fav-remove="' + tab + '" data-fav-id="' + item.id + '" title="Remove">&times;</button>';
+    html += '<button type="button" class="fav-card-remove" data-fav-remove="' + tab + '" data-fav-id="' + item.id + '" title="Remove">&times;</button>';
     html += '<div class="fav-card-body">';
     html += '<div class="fav-card-title">' + item.label + '</div>';
     if (tab === 'props') {
