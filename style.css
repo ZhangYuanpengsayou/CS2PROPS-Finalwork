@@ -1,10 +1,8 @@
-/* ====== CSS Variables ====== */
 :root {
   --font-russo-one: "Russo One", sans-serif;
   --font-chakra-petch: "Chakra Petch", sans-serif;
   --radius: 0.5rem;
 
-  /* Dark theme (default) */
   --bg-body: #000;
   --bg-card: #1a1a1a;
   --bg-card-alt: #111111;
@@ -47,7 +45,6 @@
   color-scheme: dark;
 }
 
-/* ====== Light Theme ====== */
 [data-theme="light"] {
   --bg-body: #f0f2f5;
   --bg-card: #ffffff;
@@ -88,7 +85,6 @@
   color-scheme: light;
 }
 
-/* ====== Base ====== */
 body {
   margin: 0;
   padding: 0;
@@ -98,7 +94,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ====== Navbar ====== */
 .navbar {
   position: sticky;
   top: 0;
@@ -123,7 +118,6 @@ nav {
   width: 100%;
 }
 
-/* ====== Logo ====== */
 .logo-container {
   display: flex !important;
   align-items: center !important;
@@ -150,17 +144,6 @@ nav {
   cursor: pointer;
 }
 
-.logo-text,
-.logo-shape,
-.logo-inner {
-  display: none !important;
-}
-
-.logo-text { color: var(--accent); margin-right: 5px; z-index: 10; }
-.logo-shape { background-color: var(--accent); color: white; padding: 1px 12px; transform: skewX(20deg); }
-.logo-inner { display: block; transform: skewX(-20deg); }
-
-/* ====== Menu ====== */
 .menu {
   display: flex;
   gap: 15px;
@@ -179,7 +162,6 @@ nav {
   color: var(--accent);
 }
 
-/* ====== Desktop Nav Links ====== */
 .desktop-nav-links {
   display: flex;
   gap: 20px;
@@ -203,7 +185,6 @@ nav {
   transform: translateY(-2px);
 }
 
-/* ====== Mobile Sidebar ====== */
 .mobile-sidebar {
   position: fixed;
   top: var(--navbar-height);
@@ -232,7 +213,6 @@ nav {
   font-size: 1.1rem;
 }
 
-/* ====== Hero ====== */
 .hero-container {
   position: relative;
   width: 100%;
@@ -255,7 +235,6 @@ nav {
   transform: scale(1.03);
 }
 
-/* ====== Header Content ====== */
 .header-content {
   text-align: center;
   padding-top: 1rem;
@@ -281,7 +260,6 @@ nav {
   color: var(--accent);
 }
 
-/* ====== Section Headings ====== */
 h2 {
   font-family: var(--font-chakra-petch), sans-serif;
   margin-top: 130px;
@@ -290,7 +268,6 @@ h2 {
   transition: color 0.3s ease;
 }
 
-/* ====== Map Grid ====== */
 .map-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -361,7 +338,6 @@ h2 {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ====== Nade Selector & Buttons ====== */
 .nade-selector {
   max-width: 1400px;
   margin: 0 auto 40px;
@@ -417,7 +393,6 @@ h2 {
   font-weight: 600;
 }
 
-/* ====== Nade Type Tabs ====== */
 .nade-type-tabs {
   display: flex;
   justify-content: center;
@@ -454,7 +429,6 @@ h2 {
   background: var(--border-light);
 }
 
-/* ====== Nade Video Carousel ====== */
 .nade-video-carousel {
   position: relative;
   max-width: 1200px;
@@ -519,7 +493,6 @@ h2 {
   transform: translateX(20px);
 }
 
-/* ====== Carousel Indicators ====== */
 .carousel-indicators {
   position: absolute;
   right: auto;
@@ -560,7 +533,6 @@ h2 {
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* ====== Player Carousel ====== */
 .player-carousel-section {
   max-width: 1400px;
   margin: 0 auto 60px;
@@ -652,7 +624,6 @@ h2 {
   text-transform: uppercase;
 }
 
-/* ====== Player Details ====== */
 .player-details-section {
   max-width: 1200px;
   margin: 0 auto 60px;
@@ -678,7 +649,6 @@ h2 {
   font-size: 2rem;
 }
 
-/* ====== Media Tabs ====== */
 .media-tabs {
   display: flex;
   justify-content: center;
@@ -712,7 +682,6 @@ h2 {
   box-shadow: 0 4px 10px var(--accent-glow);
 }
 
-/* ====== Media Display ====== */
 .media-display-container {
   background-color: var(--bg-media);
   border-radius: 12px;
@@ -749,7 +718,6 @@ h2 {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ====== Table ====== */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -804,7 +772,6 @@ th {
   background-color: var(--bg-table-stripe);
 }
 
-/* ====== Contact Form ====== */
 .contact-section {
   max-width: 600px;
   margin: 40px auto;
@@ -909,7 +876,6 @@ th {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* ====== Accordion ====== */
 .usage-guide {
   max-width: 800px;
   margin: 0 auto;
@@ -1016,7 +982,6 @@ th {
   background-color: var(--accent-bg) !important;
 }
 
-/* ====== Auth Modal ====== */
 .auth-modal {
   position: fixed;
   top: 0;
@@ -1065,7 +1030,6 @@ th {
   text-decoration: none;
 }
 
-/* ====== Search Dropdown ====== */
 .search-wrapper {
   position: relative;
 }
@@ -1144,7 +1108,6 @@ th {
   text-align: center;
 }
 
-/* ====== Auth / User ====== */
 .user-profile {
   display: flex;
   align-items: center;
@@ -1183,7 +1146,6 @@ th {
   color: var(--accent);
 }
 
-/* ====== Footer ====== */
 .site-footer {
   background-color: var(--bg-card-alt);
   color: var(--text-secondary);
@@ -1198,25 +1160,12 @@ th {
   margin: 0;
 }
 
-/* ====== Utilities ====== */
 .hidden {
   display: none !important;
 }
 
 [v-cloak] { display: none; }
 
-.content {
-  height: 2000px;
-  padding: 20px;
-}
-
-#videoContainer,
-#videoPlayer {
-  position: relative;
-  z-index: 9999 !important;
-}
-
-/* ====== Hidden Sections ====== */
 .hidden-section {
   display: none;
 }
@@ -1230,7 +1179,6 @@ th {
   display: none;
 }
 
-/* ====== Chinese Font ====== */
 html.chinese-font body,
 html.chinese-font {
   font-family: "Noto Sans SC", "Chakra Petch", sans-serif !important;
@@ -1252,7 +1200,6 @@ html.chinese-font .logout-mini-btn {
   font-family: "Noto Sans SC", "Chakra Petch", sans-serif;
 }
 
-/* ====== Theme Toggle Button ====== */
 .theme-toggle-btn {
   background: none;
   border: none;
@@ -1275,11 +1222,8 @@ html.chinese-font .logout-mini-btn {
   height: 20px;
 }
 
-/* ====== Favorites Button ====== */
 .fav-btn {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
   width: 2.5em;
   height: 2.5em;
   min-width: 32px;
@@ -1327,14 +1271,6 @@ html.chinese-font .logout-mini-btn {
   stroke: var(--accent);
 }
 
-.nade-fav-btn,
-.player-fav-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  bottom: auto;
-}
-
 .media-fav-wrapper {
   position: relative;
   display: inline-block;
@@ -1350,7 +1286,6 @@ html.chinese-font .logout-mini-btn {
   object-fit: contain;
 }
 
-/* ====== Favorites Section ====== */
 #favorites-section {
   max-width: 1200px;
   margin: 0 auto 60px;
@@ -1486,20 +1421,15 @@ html.chinese-font .logout-mini-btn {
   grid-column: 1 / -1;
 }
 
-/* ====== Responsive Design ====== */
-
-/* Hamburger */
 .hamburger-btn {
   display: none;
 }
 
-/* -- 1025px+ : Desktop -- */
 @media (min-width: 1025px) {
   .hamburger-btn { display: none; }
   .mobile-sidebar { display: none; }
 }
 
-/* -- 1024px and below : Tablet -- */
 @media (max-width: 1024px) {
   :root {
     --navbar-height: 80px;
@@ -1615,7 +1545,6 @@ html.chinese-font .logout-mini-btn {
   }
 }
 
-/* -- 768px and below : Small Tablet -- */
 @media (max-width: 768px) {
   :root {
     --navbar-height: 70px;
@@ -1848,7 +1777,6 @@ html.chinese-font .logout-mini-btn {
   }
 }
 
-/* -- 640px and below : Large Phone -- */
 @media (max-width: 640px) {
   .map-list {
     grid-template-columns: 1fr 1fr;
@@ -1937,7 +1865,6 @@ html.chinese-font .logout-mini-btn {
   }
 }
 
-/* -- 480px and below : Phone -- */
 @media (max-width: 480px) {
   :root {
     --navbar-height: 60px;

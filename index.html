@@ -462,7 +462,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script>
-      // 1. 角色卡片左右滑动逻辑
       const playerWrapper = document.getElementById('player-wrapper');
       const prevPlayerBtn = document.getElementById('prev-player');
       const nextPlayerBtn = document.getElementById('next-player');
@@ -477,7 +476,6 @@
         });
       }
 
-      // 2. 选手详情多媒体展示逻辑
       const playerDetailsSection = document.getElementById('player-details');
       const detailPlayerName = document.getElementById('detail-player-name');
       const mediaContentWrapper = document.getElementById('media-content-wrapper');
@@ -486,22 +484,22 @@
 
       const playerMediaDatabase = {
         'm0NESY': {
-          mvp: { type: 'video', src: 'assets/video/Players/Monesy/Mvp/1.mp4', desc: 'Incredible 1v4 clutch on Inferno! Pure mechanical skill.' },
+          mvp: { type: 'video', src: 'assets/video/Players/Monesy/Mvp/1.mp4', desc: 'Monesy\'s Lightning-Fast Sniping' },
           funny: { type: 'video', src: 'assets/video/Players/Monesy/Funny time/2.mp4', desc: 'm0NESY missing the easiest jump on Mirage.' },
           memes: { type: 'image', src: 'assets/Image/Players/Monesy/funny picture/3ed560319b5e38fe3f67000425ff2c2.png', desc: 'When you drop the AWP to save but die anyway.' }
         },
         'NiKo': {
-          mvp: { type: 'video', src: 'assets/video/Players/Niko/MVP/1.mp4', desc: 'NiKo deagle ace on Dust2.' },
+          mvp: { type: 'video', src: 'assets/video/Players/Niko/MVP/1.mp4', desc: 'Niko\'s Precise Aim' },
           funny: { type: 'video', src: 'assets/video/Players/Niko/Funny time/2.mp4', desc: 'NiKo funny moments.' },
           memes: { type: 'image', src: 'assets/Image/Players/Niko/funny picture/5cdc5092daff1d0c451f0ad99f8e7cc.png', desc: 'NiKo chilling between matches.' }
         },
         'ZywOo': {
           mvp: { type: 'video', src: 'assets/video/Players/Zywoo/Mvp/1.mp4', desc: 'ZywOo insane AWP ace on Mirage.' },
           funny: { type: 'video', src: 'assets/video/Players/Zywoo/Funny time/2.mp4', desc: 'ZywOo laughing mid-round.' },
-          memes: { type: 'image', src: 'assets/Image/Players/Zywoo/funny picture/990f678d01ad53634e6d8dbe72c3250.png', desc: 'ZywOo looking confused at the screen.' }
+          memes: { type: 'image', src: 'assets/Image/Players/Zywoo/funny picture/990f678d01ad53634e6d8dbe72c3250.png', desc: 'ZywOo\'s gameplay looks like he\'s using a wall-hack' }
         },
         's1mple': {
-          mvp: { type: 'video', src: 'assets/video/Players/S1mple/MVP/1.mp4', desc: 's1mple dropping the AWP for a noscope.' },
+          mvp: { type: 'video', src: 'assets/video/Players/S1mple/MVP/1.mp4', desc: 'S1mple\'s spectacular sniper shot' },
           funny: { type: 'video', src: 'assets/video/Players/S1mple/Funny time/2.mp4', desc: 'FPL raging moments.' },
           memes: { type: 'image', src: 'assets/Image/Players/S1mple/funny picture/4f8a87b342ec8acbb831ce5509f655b.png', desc: 'The Undertaker of CS2.' }
         }
@@ -576,7 +574,6 @@
       });
 
 
-      // 3. 表单验证逻辑
       const contactForm = document.querySelector('.contact-form');
       const nameInput = document.getElementById('name');
       const emailInput = document.getElementById('email');
@@ -694,9 +691,6 @@
           });
       }
 
-      // 4. 地图道具视频轮播逻辑
-      
-      // 构建模拟数据库，存储各个地图、各个道具类型对应的视频路径
       const mapNadeDatabase = {
         dust2: {
           Flashbang: ['assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140146.mp4', 'assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140255.mp4', 'assets/video/Maps/dust2/Flashbang/屏幕录制 2026-05-14 140345.mp4'],
@@ -766,7 +760,6 @@
               showVideo();
             };
             carouselVideoElement.addEventListener('canplay', onReady);
-            // safety timeout: show after 3s even if not loaded
             setTimeout(function() {
               carouselVideoElement.removeEventListener('canplay', onReady);
               showVideo();
@@ -850,7 +843,6 @@
       }
 
 
-      // ====== Vue 导航栏应用 + 国际化 + 章节控制 ======
 const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
 const i18nText = {
@@ -962,12 +954,10 @@ function applyTranslations(lang) {
     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
       el.placeholder = __t(key);
     } else if (el.tagName === 'SELECT') {
-      // select elements: translate the selected option text, not the select itself
     } else {
       el.textContent = __t(key);
     }
   });
-  // Update select option text
   document.querySelectorAll('[data-i18n-option]').forEach(el => {
     const keys = el.getAttribute('data-i18n-option').split(',');
     const options = el.querySelectorAll('option');
@@ -1098,13 +1088,11 @@ const navbarApp = createApp({
 
 navbarApp.mount('#navbarApp');
 
-// ====== Nade Instructions 表格交互 ======
 document.addEventListener('DOMContentLoaded', () => {
   const tableContainer = document.querySelector('.nade-info-table').closest('.table-container');
   if (!tableContainer) return;
   const allRows = tableContainer.querySelectorAll('tbody tr');
 
-  // Map nade button data-type to table row index
   const typeToRow = {
     flashbang: 0,
     hegrenade: 1,
@@ -1123,13 +1111,11 @@ document.addEventListener('DOMContentLoaded', () => {
         row.style.display = (i === rowIdx) ? '' : 'none';
       });
 
-      // Scroll to the table
       tableContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
 });
 
-// ====== 登录 / 注册逻辑 ======
 document.addEventListener('DOMContentLoaded', () => {
   const authModal = document.getElementById('authModal');
   const loginForm = document.getElementById('loginForm');
@@ -1149,7 +1135,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const userProfile = document.getElementById('userProfile');
   const userNameDisplay = document.getElementById('userNameDisplay');
 
-  // 弹窗切换
   if (loginTriggerBtn) {
     loginTriggerBtn.addEventListener('click', () => authModal.classList.remove('hidden'));
   }
@@ -1171,7 +1156,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 注册
   if (doReg) {
     doReg.addEventListener('click', () => {
       const user = regUser.value.trim();
@@ -1186,7 +1170,6 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('cs_users', JSON.stringify(users));
       alert(__t('regSuccess'));
 
-      // 切回登录界面
       registerForm.classList.add('hidden');
       loginForm.classList.remove('hidden');
       loginUser.value = user;
@@ -1194,7 +1177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 登录
   if (doLogin) {
     doLogin.addEventListener('click', () => {
       const user = loginUser.value.trim();
@@ -1215,7 +1197,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 退出登录
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem('cs_current_user');
@@ -1223,21 +1204,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 应用登录状态到 UI
   function applyAuthState(user) {
     if (loginTriggerBtn) loginTriggerBtn.classList.add('hidden');
     if (userProfile) userProfile.classList.remove('hidden');
     if (userNameDisplay) userNameDisplay.textContent = user.username;
   }
 
-  // 页面加载时检查状态
   const savedUser = JSON.parse(localStorage.getItem('cs_current_user'));
   if (savedUser) {
     applyAuthState(savedUser);
   }
 });
 
-// ====== 收藏系统 ======
 function getFavoritesKey() {
   var user = JSON.parse(localStorage.getItem('cs_current_user'));
   return user ? 'cs_favorites_' + user.username : null;
@@ -1252,7 +1230,7 @@ function getFavorites() {
       const parsed = JSON.parse(raw);
       if (parsed.props && parsed.players) return parsed;
     }
-  } catch (e) { /* corrupted data, reset */ }
+  } catch (e) { }
   return { props: [], players: [] };
 }
 
@@ -1363,7 +1341,6 @@ function refreshPlayerFavButtons() {
   });
 }
 
-// Nade carousel fav button click
 document.addEventListener('DOMContentLoaded', function() {
   var nadeFavBtn = document.querySelector('.nade-fav-btn');
   if (nadeFavBtn) {
@@ -1374,7 +1351,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Player fav button clicks (delegated)
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('.player-fav-btn');
   if (!btn) return;
@@ -1386,7 +1362,6 @@ document.addEventListener('click', function(e) {
   togglePlayerFav(player, category, src, desc);
 });
 
-// ====== 收藏展示区域逻辑 ======
 function renderFavList(tab) {
   var containerId = tab === 'props' ? 'favPropsList' : 'favPlayersList';
   var container = document.getElementById(containerId);
@@ -1420,7 +1395,6 @@ function renderFavList(tab) {
   container.innerHTML = html;
 }
 
-// Remove favorite
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('[data-fav-remove]');
   if (!btn) return;
@@ -1439,7 +1413,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Favorites tab switching
 document.addEventListener('DOMContentLoaded', function() {
   var favTabs = document.querySelectorAll('.fav-tab');
   var favPropsList = document.getElementById('favPropsList');
@@ -1462,7 +1435,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Refresh nade fav button after each carousel video change
   var origRCV = renderCarouselView;
   renderCarouselView = function() {
     origRCV();
@@ -1474,7 +1446,3 @@ document.addEventListener('DOMContentLoaded', function() {
   </body>
 
 </html>
-
-
-
-
